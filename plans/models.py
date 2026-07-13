@@ -9,12 +9,17 @@ class PlanCategory(models.TextChoices):
     MUNICIPAL = 'municipal', 'Trabajador Municipal'
     OTRO = 'otro', 'Otro'
 
+class PlanType(models.TextChoices):
+    MENSUAL = 'mensual', 'Mensual'
+    DIA = 'dia', 'Pase Diario'
+
 class Plan(models.Model):
     nombre = models.CharField(max_length=100)
     categoria = models.CharField(max_length=20, choices=PlanCategory.choices, default=PlanCategory.GENERAL)
     precio_mensual = models.DecimalField(max_digits=10, decimal_places=2)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    tipo = models.CharField(max_length=10, choices=PlanType.choices, default=PlanType.MENSUAL)
 
     def __str__(self):
         return self.nombre
