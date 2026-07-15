@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Crear cuenta - Sistema Gimnasio{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block body_class %}register-page{% endblock %}
+
+{% block content %}
+
+<nav class="register-nav">
+  <div class="register-nav__inner">
+    <a href="{% url 'landing' %}" class="register-nav__brand">
+      <span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span>
+    </a>
+    <a href="{% url 'landing' %}" class="btn register-nav__back">
+      <i class="bi bi-arrow-left"></i><span>Volver al inicio</span>
+    </a>
+  </div>
+</nav>
+
+<div class="bg-glow"></div>
+
+<div class="register-wrapper">
+  <div class="register-card">
+
+    <aside class="card-sidebar">
+      <a href="{% url 'landing' %}" class="sidebar-brand">
+        <span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span>
+      </a>
+
+      <div class="progress-vertical">
+        <div class="step-item active" data-step="1">
+          <div class="step-indicator">1</div>
+          <div class="step-text">
+            <strong>Elige tu plan</strong>
+            <span>Membresías disponibles</span>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2">
+          <div class="step-indicator">2</div>
+          <div class="step-text">
+            <strong>Tus datos</strong>
+            <span>Información personal</span>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3">
+          <div class="step-indicator">3</div>
+          <div class="step-text">
+            <strong>Pago</strong>
+            <span>Finalizar inscripción</span>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="4">
+          <div class="step-indicator">4</div>
+          <div class="step-text">
+            <strong>Listo</strong>
+            <span>Tu acceso QR</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <p>¿Ya tienes cuenta?</p>
+        <a href="#" class="btn-outline-sm">Iniciar sesión</a>
+      </div>
+    </aside>
+
+    <div class="card-content">
+      <form id="registerForm" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Paso 1: Planes -->
+        <div class="step-panel active" id="step1">
+          <div class="panel-header">
+            <p class="eyebrow">Membresías</p>
+            <h2>Selecciona tu plan</h2>
+            <p class="panel-sub">Elige la membresía que mejor se adapte a tu ritmo de entrenamiento.</p>
+          </div>
+
+          <div class="plans-scroll">
+            <label class="plan-option">
+              <input type="radio" name="selected_plan" value="estudiante" data-price="18990" data-name="Estudiante" onclick="selectPlan(this)">
+              <div class="plan-option__body">
+                <div class="plan-option__row">
+                  <span class="plan-option__name">Estudiante</span>
+                  <div class="plan-option__price">$18.990<span>/mes</span></div>
+                </div>
+                <p class="plan-option__desc">Acceso completo con descuento verificando matrícula.</p>
+                <ul class="plan-option__list">
+                  <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
+                  <li><i class="bi bi-check2"></i> Zona de pesas y cardio</li>
+                  <li><i class="bi bi-check2"></i> Seguimiento de rutina</li>
+                </ul>
+              </div>
+              <i class="bi bi-check-circle-fill plan-option__check"></i>
+            </label>
+
+            <label class="plan-option plan-option--featured">
+              <input type="radio" name="selected_plan" value="general" data-price="24990" data-name="General" onclick="selectPlan(this)">
+              <span class="plan-option__badge">Más elegido</span>
+              <div class="plan-option__body">
+                <div class="plan-option__row">
+                  <span class="plan-option__name">General</span>
+                  <div class="plan-option__price">$24.990<span>/mes</span></div>
+                </div>
+                <p class="plan-option__desc">El plan completo para entrenar sin restricciones.</p>
+                <ul class="plan-option__list">
+                  <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
+                  <li><i class="bi bi-check2"></i> Todas las zonas</li>
+                  <li><i class="bi bi-check2"></i> Rachas y estadísticas</li>
+                  <li><i class="bi bi-check2"></i> Renovación automática</li>
+                </ul>
+              </div>
+              <i class="bi bi-check-circle-fill plan-option__check"></i>
+            </label>
+
+            <label class="plan-option">
+              <input type="radio" name="selected_plan" value="municipal" data-price="16990" data-name="Trabajador municipal" onclick="selectPlan(this)">
+              <div class="plan-option__body">
+                <div class="plan-option__row">
+                  <span class="plan-option__name">Trabajador municipal</span>
+                  <div class="plan-option__price">$16.990<span>/mes</span></div>
+                </div>
+                <p class="plan-option__desc">Convenio para funcionarios municipales acreditados.</p>
+                <ul class="plan-option__list">
+                  <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
+                  <li><i class="bi bi-check2"></i> Zona de pesas y cardio</li>
+                  <li><i class="bi bi-check2"></i> Sin costo de inscripción</li>
+                </ul>
+              </div>
+              <i class="bi bi-check-circle-fill plan-option__check"></i>
+            </label>
+
+            <label class="plan-option">
+              <input type="radio" name="selected_plan" value="dia" data-price="5000" data-name="Pase diario" onclick="selectPlan(this)">
+              <div class="plan-option__body">
+                <div class="plan-option__row">
+                  <span class="plan-option__name">Pase diario</span>
+                  <div class="plan-option__price">$5.000<span>/día</span></div>
+                </div>
+                <p class="plan-option__desc">¿Vienes de visita? Acceso por un solo día a todas las instalaciones.</p>
+                <ul class="plan-option__list">
+                  <li><i class="bi bi-check2"></i> Acceso el día seleccionado</li>
+                  <li><i class="bi bi-check2"></i> Todas las zonas</li>
+                </ul>
+              </div>
+              <i class="bi bi-check-circle-fill plan-option__check"></i>
+            </label>
+          </div>
+
+          <div class="panel-actions">
+            <button type="button" class="btn btn-volt" id="btnStep1" onclick="nextStep()" disabled>
+              Siguiente <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 2: Datos personales -->
+        <div class="step-panel" id="step2">
+          <div class="panel-header">
+            <p class="eyebrow">Perfil</p>
+            <h2>Tus datos personales</h2>
+            <p class="panel-sub">Necesarios para generar tu acceso QR y tu suscripción.</p>
+          </div>
+
+          <div class="compact-form-grid">
+            <span class="form-section-label">Datos personales</span>
+            <div class="form-group">
+              <label>RUT</label>
+              <input type="text" name="rut" placeholder="12.345.678-9" required>
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" name="telefono" placeholder="+56 9 1234 5678" required>
+            </div>
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" name="first_name" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label>Apellido paterno</label>
+              <input type="text" name="last_name" placeholder="Tu apellido" required>
+            </div>
+            <div class="form-group">
+              <label>Apellido materno</label>
+              <input type="text" name="apellido_materno" placeholder="Opcional">
+            </div>
+            <div class="form-group">
+              <label>Fecha de nacimiento</label>
+              <input type="date" name="fecha_nacimiento" id="fechaNacimiento" oninput="actualizarEdad()" required>
+              <span class="form-hint" id="edadPreview"></span>
+            </div>
+
+            <span class="form-section-label">Cuenta y estudios</span>
+            <div class="form-group full-width">
+              <label>Correo electrónico</label>
+              <input type="email" name="email" placeholder="correo@ejemplo.com" required>
+              <span class="form-hint">Aquí recibirás tu código QR de acceso.</span>
+            </div>
+            <div class="form-group full-width">
+              <label>Estudios <span class="optional-tag">Opcional</span></label>
+              <input type="text" name="estudios" placeholder="Institución de estudios, si aplica">
+            </div>
+            <div class="form-group full-width" id="certificadoGroup" style="display:none;">
+              <label for="certificadoInput">Certificado de alumno regular <span class="optional-tag">PDF, se valida en recepción</span></label>
+              <input type="file" id="certificadoInput" name="certificado_estudios" accept="application/pdf" hidden onchange="handleCertificadoChange(this)">
+              <label for="certificadoInput" class="file-upload__zone" id="fileUploadZone">
+                <i class="bi bi-cloud-arrow-up"></i>
+                <span id="fileUploadText">Arrastra tu PDF aquí o haz clic para subirlo</span>
+                <button type="button" class="file-upload__remove" id="fileUploadRemove" onclick="removeCertificado(event)" hidden>
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Contraseña</label>
+              <input type="password" name="password" placeholder="Mín. 8 caracteres" required>
+            </div>
+            <div class="form-group">
+              <label>Confirmar contraseña</label>
+              <input type="password" name="confirmar_password" placeholder="Repetir contraseña" required>
+            </div>
+          </div>
+
+          <label class="consent-box">
+            <input type="checkbox" id="consentCheck" name="consentimiento_datos" required>
+            <span class="consent-box__text">
+              Autorizo el tratamiento de mis datos personales conforme a la
+              <a href="#" class="consent-link" onclick="openPrivacyModal(event)">Política de Privacidad</a>,
+              en cumplimiento de la Ley N° 19.628 y su reforma, la Ley N° 21.719 sobre Protección de Datos Personales.
+              Mis datos serán usados exclusivamente para gestionar mi membresía, control de acceso y comunicaciones del gimnasio.
+            </span>
+          </label>
+
+          <div class="panel-actions">
+            <button type="button" class="btn btn-text" onclick="prevStep()">Volver</button>
+            <button type="button" class="btn btn-volt" onclick="nextStep()">
+              Ir al pago <i class="bi bi-credit-card"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 3: Pago -->
+        <div class="step-panel" id="step3">
+          <div class="panel-header">
+            <p class="eyebrow">Pago</p>
+            <h2>Finalizar inscripción</h2>
+            <p class="panel-sub">Selecciona tu método de transferencia preferido.</p>
+          </div>
+
+          <div class="payment-summary">
+            <span id="summaryPlanName">Plan seleccionado</span>
+            <strong id="summaryPlanPrice">$0</strong>
+          </div>
+
+          <div class="payment-options-grid">
+            <label class="payment-option">
+              <input type="radio" name="metodo_pago" value="mercadopago" onclick="enablePayment()">
+              <div class="payment-option__content">
+                <i class="bi bi-wallet2"></i>
+                <span>MercadoPago</span>
+                <small>Transferencia vía app</small>
+              </div>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="metodo_pago" value="cuenta_rut" onclick="enablePayment()">
+              <div class="payment-option__content">
+                <i class="bi bi-bank"></i>
+                <span>Cuenta RUT</span>
+                <small>Transferencia BancoEstado</small>
+              </div>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="metodo_pago" value="paypal" onclick="enablePayment()">
+              <div class="payment-option__content">
+                <i class="bi bi-paypal"></i>
+                <span>PayPal</span>
+                <small>Transferencia internacional</small>
+              </div>
+            </label>
+          </div>
+
+          <div class="options-stack">
+            <label class="checkbox-row">
+              <input type="checkbox" name="enviar_qr_email" checked>
+              <span>
+                Enviar código QR de acceso al correo
+                <small>Necesario para ingresar al gimnasio</small>
+              </span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" name="enviar_contrato" checked>
+              <span>
+                Enviar copia del contrato de socio al correo
+                <small>Incluye términos, condiciones y datos del plan</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="panel-actions">
+            <button type="button" class="btn btn-text" onclick="prevStep()">Volver</button>
+            <button type="button" class="btn btn-volt" id="btnPayment" onclick="processPayment()" disabled>
+              Confirmar y registrarse
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 4: Éxito -->
+        <div class="step-panel" id="step4">
+          <div class="success-wrapper">
+            <div class="success-header">
+              <div class="success-icon">
+                <div class="success-icon__ripple"></div>
+                <i class="bi bi-check-lg"></i>
+              </div>
+              <h2>¡Bienvenido al gimnasio!</h2>
+              <p>Tu cuenta está lista. Este es tu pase digital de acceso.</p>
+            </div>
+
+            <div class="digital-pass">
+              <div class="digital-pass__top">
+                <span>ACCESO SOCIO</span>
+              </div>
+              <div class="digital-pass__qr">
+                <div id="qrContainer" class="qr-content"></div>
+              </div>
+              <p class="digital-pass__scan"><i class="bi bi-wifi"></i> Escanea en recepción</p>
+            </div>
+
+            <div class="success-footer">
+              <div class="info-pill">
+                <i class="bi bi-envelope-check"></i>
+                <span>Copia enviada a tu correo</span>
+              </div>
+              <a href="#" class="btn btn-volt btn-block">
+                Iniciar sesión y entrenar
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal política de privacidad -->
+<div id="privacyModal" class="privacy-modal-overlay">
+  <div class="privacy-modal">
+    <button type="button" class="privacy-modal__close" onclick="closePrivacyModal()" aria-label="Cerrar">
+      <i class="bi bi-x-lg"></i>
+    </button>
+    <h3>Política de privacidad</h3>
+    <div class="privacy-modal__body">
+      <p>De acuerdo a la Ley N° 19.628 y su reforma mediante la Ley N° 21.719, este sitio solicita tu consentimiento explícito antes de recolectar tus datos personales.</p>
+      <ul>
+        <li><strong>Consentimiento:</strong> tus datos solo se recolectan tras tu aceptación clara y voluntaria.</li>
+        <li><strong>Uso limitado:</strong> se usan únicamente para gestionar tu membresía, acceso QR y comunicaciones del gimnasio.</li>
+        <li><strong>Derechos ARCO:</strong> puedes acceder, rectificar, cancelar u oponerte al uso de tus datos en cualquier momento.</li>
+        <li><strong>Protección:</strong> tus datos se almacenan de forma segura y no se comparten con terceros sin autorización.</li>
+      </ul>
+    </div>
+    <button type="button" class="btn btn-volt btn-block" onclick="closePrivacyModal()">Entendido</button>
+  </div>
+</div>
+
+<!-- Modal de error genérico -->
+<div id="errorModal" class="privacy-modal-overlay">
+  <div class="privacy-modal privacy-modal--sm">
+    <div class="error-modal__icon"><i class="bi bi-exclamation-triangle"></i></div>
+    <h3 id="errorModalTitle">Error</h3>
+    <p id="errorModalMessage" class="error-modal__text">Mensaje de error aquí.</p>
+    <button type="button" class="btn btn-volt btn-block" onclick="closeErrorModal()">Entendido</button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/register.js' %}"></script>
+{% endblock %}

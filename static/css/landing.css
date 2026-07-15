@@ -201,11 +201,11 @@ body {
 }
 .hero__grid {
   position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 3rem;
-  align-items: center;
+  z-index: 2;
+  display: block;
+}
+.hero__copy {
+  max-width: 650px;
 }
 .hero__title {
   font-family: var(--font-display);
@@ -246,6 +246,44 @@ body {
   letter-spacing: 0.05em;
 }
 
+/* --- SLIDER DE FONDO HERO --- */
+.hero__background-slider {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero__bg-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0;
+  animation: fadeCrossfade 15s ease-in-out infinite;
+}
+
+.hero__bg-slide:nth-child(1) { animation-delay: 0s; }
+.bg-slide-2 { animation-delay: 5s !important; }
+.bg-slide-3 { animation-delay: 10s !important; }
+
+@keyframes fadeCrossfade {
+  0%   { opacity: 0; transform: scale(1); }
+  10%  { opacity: 0.6; }
+  33%  { opacity: 0.6; }
+  43%  { opacity: 0; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+.hero__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(to right, var(--bg-base) 25%, rgba(11, 14, 17, 0.85) 50%, transparent 100%),
+    linear-gradient(to bottom, var(--bg-base) 0%, transparent 15%, transparent 85%, var(--bg-base) 100%);
+  pointer-events: none;
+}
+
 /* Access card (elemento firma): tarjeta de socio digital */
 .access-card {
   position: relative;
@@ -266,6 +304,7 @@ body {
   padding: 1px;
   background: linear-gradient(135deg, rgba(200, 255, 77, 0.35), transparent 40%, transparent 70%, rgba(255, 67, 104, 0.25));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -407,17 +446,26 @@ body {
 
 /* Carrusel */
 .gym-carousel { margin-top: 2rem; }
+
 .carousel-slide__bg {
   height: 420px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0;
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
-.carousel-slide__bg i { font-size: 5rem; color: rgba(242, 243, 240, 0.25); }
-.carousel-slide__bg--1 { background: linear-gradient(135deg, #1b2027, #14181d); }
-.carousel-slide__bg--2 { background: linear-gradient(135deg, #201418, #14181d); }
-.carousel-slide__bg--3 { background: linear-gradient(135deg, #141d18, #14181d); }
+
+.carousel-slide__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(11, 14, 17, 0.95) 0%, rgba(11, 14, 17, 0.3) 50%, rgba(11, 14, 17, 0.1) 100%);
+  pointer-events: none;
+}
+
 .carousel-caption {
   text-align: left;
   left: 5%;
@@ -428,6 +476,7 @@ body {
   padding: 0.8rem 1.2rem;
   border-radius: 0.6rem;
   max-width: 280px;
+  z-index: 2;
 }
 .carousel-caption h5 { font-family: var(--font-display); letter-spacing: 0.02em; }
 .carousel-caption p { font-size: 0.85rem; margin-bottom: 0; color: var(--text-muted); }
@@ -533,16 +582,29 @@ body {
 
 /* Tablet */
 @media (max-width: 991.98px) {
-  .hero__grid { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
-  .hero__actions, .hero__stats { justify-content: center; }
-  .hero__lead { margin-inline: auto; }
-  .access-card { max-width: 100%; margin: 0 auto; }
+  .hero__grid { 
+    display: flex;
+    flex-direction: column;
+    text-align: center; 
+  }
+  
+  .hero__copy { 
+    max-width: 100%; 
+  }
+  
+  .hero__actions, .hero__stats { 
+    justify-content: center; 
+  }
+  
+  .hero__lead { 
+    margin-inline: auto; 
+  }
 
-  /* En mobile el navbar-collapse de escritorio no se usa: vive el sidebar aparte */
-  .navbar-collapse { display: none !important; }
-
-  /* Ticker fuera en mobile: simplifica el header y evita saltos de altura al hacer scroll */
-  .access-ticker { display: none; }
+  .hero__bg-overlay {
+    background: 
+      linear-gradient(to right, rgba(11, 14, 17, 0.9) 0%, rgba(11, 14, 17, 0.7) 100%),
+      linear-gradient(to top, var(--bg-base) 0%, transparent 20%);
+  }
 }
 
 /* Botón hamburguesa custom (reemplaza navbar-toggler de Bootstrap) */
@@ -701,7 +763,6 @@ body.no-scroll { overflow: hidden; }
     flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
     gap: 1rem;
     margin: 0 -1rem;
     padding: 0.3rem 1rem 1.2rem;
