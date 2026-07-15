@@ -1,0 +1,439 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %}Sistema Gimnasio - Entrena. Registra. Progresa.{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block body_class %}landing-page{% endblock %}
+
+{% block content %}
+<!-- Header: ticker + navbar en un solo bloque fijo -->
+<div class="site-header" id="siteHeader">
+  <div class="access-ticker" aria-hidden="true">
+    <div class="access-ticker__track">
+      <span>ACCESO VÁLIDO — 128 CHECK-INS HOY</span>
+      <span>·</span>
+      <span>RACHA MÁS LARGA — 42 DÍAS</span>
+      <span>·</span>
+      <span>3 SEDES ACTIVAS</span>
+      <span>·</span>
+      <span>QR GENERADO AL INSTANTE</span>
+      <span>·</span>
+      <span>ACCESO VÁLIDO — 128 CHECK-INS HOY</span>
+      <span>·</span>
+      <span>RACHA MÁS LARGA — 42 DÍAS</span>
+      <span>·</span>
+      <span>3 SEDES ACTIVAS</span>
+      <span>·</span>
+      <span>QR GENERADO AL INSTANTE</span>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="#inicio">
+        <span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span>
+      </a>
+
+      <button class="nav-toggler" id="navToggler" type="button" aria-controls="mobileSidebar" aria-expanded="false" aria-label="Abrir menú">
+        <span class="nav-toggler__bar"></span>
+        <span class="nav-toggler__bar"></span>
+        <span class="nav-toggler__bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#instalaciones">Instalaciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#planes">Planes</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ubicacion">Ubicación</a></li>
+        </ul>
+        <div class="dropdown account-dropdown">
+          <button class="btn account-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Mi cuenta">
+            <i class="bi bi-person-circle"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end account-panel">
+            <div class="account-panel__header">
+              <span class="account-panel__icon"><i class="bi bi-person-circle"></i></span>
+              <span>
+                <span class="account-panel__title">Mi cuenta</span>
+                <span class="account-panel__subtitle">Accede o regístrate</span>
+              </span>
+            </div>
+            <div class="account-panel__body">
+              <a href="#" class="account-panel__action account-panel__action--primary">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+              </a>
+              <a href="#" class="account-panel__action">
+                <i class="bi bi-person-plus"></i> Crear cuenta
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Sidebar mobile: independiente del navbar-collapse de escritorio -->
+<div class="mobile-sidebar" id="mobileSidebar" aria-hidden="true">
+  <div class="mobile-sidebar__header">
+    <span><span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span></span>
+    <button class="mobile-sidebar__close" id="mobileSidebarClose" aria-label="Cerrar menú">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <nav class="mobile-sidebar__nav">
+    <a class="mobile-sidebar__link" href="#inicio">Inicio</a>
+    <a class="mobile-sidebar__link" href="#nosotros">Nosotros</a>
+    <a class="mobile-sidebar__link" href="#instalaciones">Instalaciones</a>
+    <a class="mobile-sidebar__link" href="#planes">Planes</a>
+    <a class="mobile-sidebar__link" href="#ubicacion">Ubicación</a>
+  </nav>
+  <div class="mobile-sidebar__account">
+    <span class="mobile-sidebar__account-title">Mi cuenta</span>
+    <a href="#" class="mobile-sidebar__account-action mobile-sidebar__account-action--primary">
+      <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+    </a>
+    <a href="#" class="mobile-sidebar__account-action">
+      <i class="bi bi-person-plus"></i> Crear cuenta
+    </a>
+  </div>
+</div>
+<div class="mobile-sidebar__backdrop" id="mobileSidebarBackdrop"></div>
+
+<!-- Hero -->
+<header class="hero" id="inicio">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__copy reveal">
+      <p class="eyebrow">Control de acceso + rutinas + pagos</p>
+      <h1 class="hero__title">Tu gimnasio,<br><span class="text-accent-volt">bajo</span> <span class="text-accent-coral">control</span>.</h1>
+      <p class="hero__lead">Un solo QR para entrar, seguir tu racha y pagar tu plan. Sin filas, sin planillas, sin excusas.</p>
+      <div class="hero__actions">
+        <a href="#planes" class="btn btn-volt btn-lg">Ver planes</a>
+        <a href="#nosotros" class="btn btn-outline-light btn-lg">Conocer el gimnasio</a>
+      </div>
+      <div class="hero__stats">
+        <div><span class="stat-num">1.200+</span><span class="stat-label">socios activos</span></div>
+        <div><span class="stat-num">24/7</span><span class="stat-label">acceso QR</span></div>
+        <div><span class="stat-num">4.9</span><span class="stat-label">valoración</span></div>
+      </div>
+    </div>
+
+    <div class="hero__panel reveal">
+      <div class="access-card">
+        <div class="access-card__header">
+          <span class="dot"></span> LECTOR DE ACCESO
+          <span class="access-card__id">#GS-04871</span>
+        </div>
+        <div class="access-card__qr">
+        <div class="qr-mock">
+           <svg viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+             <rect x="0" y="0" width="7" height="1"/><rect x="8" y="0" width="5" height="1"/><rect x="14" y="0" width="7" height="1"/><rect x="0" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="8" y="1" width="1" height="1"/><rect x="10" y="1" width="1" height="1"/><rect x="12" y="1" width="1" height="1"/><rect x="14" y="1" width="1" height="1"/><rect x="20" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="2" y="2" width="3" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="9" y="2" width="2" height="1"/><rect x="12" y="2" width="1" height="1"/><rect x="14" y="2" width="1" height="1"/><rect x="16" y="2" width="3" height="1"/><rect x="20" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="2" y="3" width="3" height="1"/><rect x="6" y="3" width="1" height="1"/><rect x="9" y="3" width="3" height="1"/><rect x="14" y="3" width="1" height="1"/><rect x="16" y="3" width="3" height="1"/><rect x="20" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="6" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="10" y="4" width="1" height="1"/><rect x="14" y="4" width="1" height="1"/><rect x="16" y="4" width="3" height="1"/><rect x="20" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="8" y="5" width="4" height="1"/><rect x="14" y="5" width="1" height="1"/><rect x="20" y="5" width="1" height="1"/><rect x="0" y="6" width="7" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="12" y="6" width="1" height="1"/><rect x="14" y="6" width="7" height="1"/><rect x="8" y="7" width="2" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/><rect x="9" y="8" width="4" height="1"/><rect x="14" y="8" width="4" height="1"/><rect x="19" y="8" width="2" height="1"/><rect x="2" y="9" width="1" height="1"/><rect x="7" y="9" width="1" height="1"/><rect x="9" y="9" width="2" height="1"/><rect x="14" y="9" width="3" height="1"/><rect x="19" y="9" width="1" height="1"/><rect x="2" y="10" width="1" height="1"/><rect x="4" y="10" width="4" height="1"/><rect x="9" y="10" width="7" height="1"/><rect x="17" y="10" width="4" height="1"/><rect x="0" y="11" width="2" height="1"/><rect x="3" y="11" width="3" height="1"/><rect x="7" y="11" width="2" height="1"/><rect x="10" y="11" width="1" height="1"/><rect x="12" y="11" width="1" height="1"/><rect x="16" y="11" width="1" height="1"/><rect x="18" y="11" width="1" height="1"/><rect x="20" y="11" width="1" height="1"/><rect x="3" y="12" width="2" height="1"/><rect x="6" y="12" width="1" height="1"/><rect x="8" y="12" width="1" height="1"/><rect x="11" y="12" width="1" height="1"/><rect x="19" y="12" width="1" height="1"/><rect x="8" y="13" width="1" height="1"/><rect x="10" y="13" width="4" height="1"/><rect x="16" y="13" width="1" height="1"/><rect x="18" y="13" width="3" height="1"/><rect x="0" y="14" width="7" height="1"/><rect x="9" y="14" width="1" height="1"/><rect x="11" y="14" width="3" height="1"/><rect x="15" y="14" width="1" height="1"/><rect x="19" y="14" width="2" height="1"/><rect x="0" y="15" width="1" height="1"/><rect x="6" y="15" width="1" height="1"/><rect x="10" y="15" width="1" height="1"/><rect x="12" y="15" width="4" height="1"/><rect x="19" y="15" width="1" height="1"/><rect x="0" y="16" width="1" height="1"/><rect x="2" y="16" width="3" height="1"/><rect x="6" y="16" width="1" height="1"/><rect x="8" y="16" width="2" height="1"/><rect x="16" y="16" width="2" height="1"/><rect x="19" y="16" width="2" height="1"/><rect x="0" y="17" width="1" height="1"/><rect x="2" y="17" width="3" height="1"/><rect x="6" y="17" width="1" height="1"/><rect x="9" y="17" width="6" height="1"/><rect x="18" y="17" width="1" height="1"/><rect x="0" y="18" width="1" height="1"/><rect x="2" y="18" width="3" height="1"/><rect x="6" y="18" width="1" height="1"/><rect x="8" y="18" width="1" height="1"/><rect x="10" y="18" width="3" height="1"/><rect x="14" y="18" width="2" height="1"/><rect x="19" y="18" width="1" height="1"/><rect x="0" y="19" width="1" height="1"/><rect x="6" y="19" width="1" height="1"/><rect x="8" y="19" width="5" height="1"/><rect x="14" y="19" width="2" height="1"/><rect x="17" y="19" width="2" height="1"/><rect x="20" y="19" width="1" height="1"/><rect x="0" y="20" width="7" height="1"/><rect x="10" y="20" width="1" height="1"/><rect x="12" y="20" width="2" height="1"/><rect x="15" y="20" width="6" height="1"/>
+           </svg>
+           <div class="qr-mock__scan"></div>
+        </div>
+        </div>
+        <div class="access-card__member">
+          <span class="access-card__avatar">AM</span>
+          <span>
+            <span class="access-card__name">Alex Morales</span>
+            <span class="access-card__plan">Plan General</span>
+          </span>
+        </div>
+        <div class="access-card__status">
+          <i class="bi bi-check-circle-fill"></i> ACCESO VÁLIDO
+        </div>
+        <div class="access-card__footer">Vence en 30 días · Renovación automática</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Nosotros / info principal -->
+<section class="section" id="nosotros">
+  <div class="container">
+    <p class="eyebrow reveal">El lugar</p>
+    <h2 class="section-title reveal">Todo lo que necesitas para entrenar en serio</h2>
+    <div class="row g-4 mt-2">
+      <div class="col-md-4 reveal">
+        <div class="feature-card">
+          <i class="bi bi-qr-code-scan"></i>
+          <h3>Acceso por QR</h3>
+          <p>Tu código se genera al registrarte. Recepción valida tu plan en segundos, sin contacto.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal">
+        <div class="feature-card">
+          <i class="bi bi-graph-up-arrow"></i>
+          <h3>Progreso real</h3>
+          <p>Rachas de asistencia, series logradas por máquina y cardio registrado sesión a sesión.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal">
+        <div class="feature-card">
+          <i class="bi bi-credit-card-2-front"></i>
+          <h3>Pago online</h3>
+          <p>Paga tu mensualidad desde el panel y renueva tu plan sin pisar recepción.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mt-1">
+      <div class="col-md-6 reveal">
+        <div class="info-strip">
+          <i class="bi bi-clock-history"></i>
+          <div>
+            <h4>Horario</h4>
+            <p>Lunes a viernes 06:00–23:00 · Sábado 08:00–20:00 · Domingo 09:00–14:00</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 reveal">
+        <div class="info-strip">
+          <i class="bi bi-person-workspace"></i>
+          <div>
+            <h4>Equipo</h4>
+            <p>Recepción presente en todo horario. Rutinas guiadas para quienes están partiendo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Carrusel instalaciones -->
+<section class="section section--tight" id="instalaciones">
+  <div class="container">
+    <p class="eyebrow reveal">Instalaciones</p>
+    <h2 class="section-title reveal">Conoce el espacio</h2>
+  </div>
+
+  <div id="carruselGym" class="carousel slide gym-carousel reveal" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carruselGym" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Zona de pesas"></button>
+      <button type="button" data-bs-target="#carruselGym" data-bs-slide-to="1" aria-label="Zona cardio"></button>
+      <button type="button" data-bs-target="#carruselGym" data-bs-slide-to="2" aria-label="Zona funcional"></button>
+    </div>
+    <div class="carousel-inner">
+      <!-- Reemplaza cada .carousel-slide__bg por una imagen real: <img src="{% static 'img/pesas.jpg' %}" class="d-block w-100" alt="Zona de pesas"> -->
+      <div class="carousel-item active">
+        <div class="carousel-slide__bg carousel-slide__bg--1">
+          <i class="bi bi-bar-chart-steps"></i>
+        </div>
+        <div class="carousel-caption">
+          <h5>Zona de pesas</h5>
+          <p>Máquinas y peso libre para todo nivel</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-slide__bg carousel-slide__bg--2">
+          <i class="bi bi-heart-pulse"></i>
+        </div>
+        <div class="carousel-caption">
+          <h5>Zona cardio</h5>
+          <p>Trotadoras, bicicletas y elípticas</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-slide__bg carousel-slide__bg--3">
+          <i class="bi bi-lightning-charge"></i>
+        </div>
+        <div class="carousel-caption">
+          <h5>Zona funcional</h5>
+          <p>Espacio abierto para rutinas de alta intensidad</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carruselGym" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carruselGym" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+</section>
+
+<!-- Planes -->
+<section class="section" id="planes">
+  <div class="container">
+    <p class="eyebrow reveal">Membresías</p>
+    <h2 class="section-title reveal">Un plan para cada etapa</h2>
+    <span class="plan-hint">← desliza para ver los 3 planes →</span>
+    <div class="row g-4 mt-2 align-items-stretch">
+      <div class="col-lg-4 reveal">
+        <div class="plan-card">
+          <h3>Estudiante</h3>
+          <p class="plan-card__desc">Acceso completo con descuento verificando matrícula.</p>
+          <div class="plan-card__price"><span>$</span>18.990<span class="plan-card__period">/mes</span></div>
+          <ul class="plan-card__list">
+            <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
+            <li><i class="bi bi-check2"></i> Zona de pesas y cardio</li>
+            <li><i class="bi bi-check2"></i> Seguimiento de rutina</li>
+          </ul>
+          <a href="#" class="btn btn-outline-light w-100">Elegir plan</a>
+        </div>
+      </div>
+      <div class="col-lg-4 reveal">
+        <div class="plan-card plan-card--featured">
+          <span class="plan-card__badge">Más elegido</span>
+          <h3>General</h3>
+          <p class="plan-card__desc">El plan completo para entrenar sin restricciones.</p>
+          <div class="plan-card__price"><span>$</span>24.990<span class="plan-card__period">/mes</span></div>
+          <ul class="plan-card__list">
+            <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
+            <li><i class="bi bi-check2"></i> Todas las zonas</li>
+            <li><i class="bi bi-check2"></i> Rachas y estadísticas</li>
+            <li><i class="bi bi-check2"></i> Renovación automática</li>
+          </ul>
+          <a href="#" class="btn btn-volt w-100">Elegir plan</a>
+        </div>
+      </div>
+      <div class="col-lg-4 reveal">
+        <div class="plan-card">
+          <h3>Trabajador municipal</h3>
+          <p class="plan-card__desc">Convenio para funcionarios municipales acreditados.</p>
+          <div class="plan-card__price"><span>$</span>16.990<span class="plan-card__period">/mes</span></div>
+          <ul class="plan-card__list">
+            <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
+            <li><i class="bi bi-check2"></i> Zona de pesas y cardio</li>
+            <li><i class="bi bi-check2"></i> Sin costo de inscripción</li>
+          </ul>
+          <a href="#" class="btn btn-outline-light w-100">Elegir plan</a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center plan-card__note reveal" style="padding: 1.8rem 1.5rem; border-radius: 1rem; background: rgba(33, 173, 95, 0.08);">
+      <p class="h4 fw-bold mb-2">Pase diario disponible</p>
+      <p class="mb-2">¿Vienes de visita? Adquiere tu pase diario en recepción y disfruta de todas las instalaciones.</p>
+      <p class="small mb-0">Precio especial: <span class="text-accent-volt" style="font-size: 1.45rem; font-weight: 700;">$5.000</span> por día</p>
+    </div>
+  </div>
+</section>
+
+<!-- Ubicación -->
+<section class="section" id="ubicacion">
+  <div class="container">
+    <p class="eyebrow reveal">Cómo llegar</p>
+    <h2 class="section-title reveal">Ubicación</h2>
+    <div class="row g-4 mt-2 align-items-stretch">
+      <div class="col-lg-7 reveal">
+        <div class="map-frame">
+          <!-- Reemplazar el src por la dirección real del gimnasio -->
+          <iframe
+            src="https://maps.google.com/maps?q=Rancagua%2C%20O%27Higgins%2C%20Chile&t=&z=14&ie=UTF8&iwloc=&output=embed"
+            width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Ubicación del gimnasio">
+          </iframe>
+        </div>
+      </div>
+      <div class="col-lg-5 reveal">
+        <div class="contact-card">
+          <h3>Visítanos</h3>
+          <ul class="contact-list">
+            <li><i class="bi bi-geo-alt"></i> Av. Principal 1234, Rancagua, O'Higgins</li>
+            <li><i class="bi bi-telephone"></i> +56 9 1234 5678</li>
+            <li><i class="bi bi-envelope"></i> contacto@sistemagimnasio.cl</li>
+            <li><i class="bi bi-clock"></i> Lun–Vie 06:00–23:00 · Sáb 08:00–20:00</li>
+          </ul>
+          <a href="https://wa.me/56912345678" class="btn btn-volt w-100 mt-2" target="_blank" rel="noopener">
+            <i class="bi bi-whatsapp"></i> Escríbenos por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span>
+        <p class="footer__desc">Plataforma de gestión de gimnasio: acceso QR, planes, pagos y seguimiento de progreso.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Navegación</h5>
+        <ul class="footer__links">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#planes">Planes</a></li>
+          <li><a href="#ubicacion">Ubicación</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-6">
+        <h5>Cuenta</h5>
+        <ul class="footer__links">
+          <li><a href="#">Iniciar sesión</a></li>
+          <li><a href="#">Crear cuenta</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h5>Contacto</h5>
+        <ul class="footer__links">
+          <li>Av. Principal 1234, Rancagua</li>
+          <li>+56 9 1234 5678</li>
+          <li>contacto@sistemagimnasio.cl</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© {% now "Y" %} Sistema Gimnasio. Todos los derechos reservados.</span>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/landing.js' %}"></script>
+    <script>
+    (function () {
+      var toggler = document.getElementById('navToggler');
+      var sidebar = document.getElementById('mobileSidebar');
+      var backdrop = document.getElementById('mobileSidebarBackdrop');
+      var closeBtn = document.getElementById('mobileSidebarClose');
+      if (!toggler || !sidebar || !backdrop) return;
+
+      function openSidebar() {
+        sidebar.classList.add('is-open');
+        backdrop.classList.add('is-open');
+        document.body.classList.add('no-scroll');
+        toggler.setAttribute('aria-expanded', 'true');
+        sidebar.setAttribute('aria-hidden', 'false');
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('is-open');
+        backdrop.classList.remove('is-open');
+        document.body.classList.remove('no-scroll');
+        toggler.setAttribute('aria-expanded', 'false');
+        sidebar.setAttribute('aria-hidden', 'true');
+      }
+
+      toggler.addEventListener('click', function () {
+        sidebar.classList.contains('is-open') ? closeSidebar() : openSidebar();
+      });
+      closeBtn.addEventListener('click', closeSidebar);
+      backdrop.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSidebar();
+      });
+      sidebar.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeSidebar);
+      });
+      window.addEventListener('resize', function () {
+        if (window.innerWidth >= 992) closeSidebar();
+      });
+    })();
+    </script>
+{% endblock %}

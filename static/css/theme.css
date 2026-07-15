@@ -1,0 +1,28 @@
+:root {
+  --bg-base: #0b0e11;
+  --bg-panel: #14181d;
+  --bg-panel-2: #1b2027;
+  --border: #262b33;
+  --text-primary: #f2f3f0;
+  --text-muted: #8b92a0;
+  --volt: #c8ff4d;
+  --volt-dim: #9bd431;
+  --coral: #ff4368;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+.brand-mark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.03em;
+  color: var(--text-primary);
+}
+.brand-mark--accent { color: var(--volt); }

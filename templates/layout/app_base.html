@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+
+  <button class="app-topbar__toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#appSidebar" aria-controls="appSidebar" aria-label="Abrir menú">
+    <i class="bi bi-list"></i>
+  </button>
+
+  <aside class="app-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="appSidebar">
+    <div class="app-sidebar__brand">
+      <span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span>
+      <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#appSidebar" aria-label="Cerrar"></button>
+    </div>
+    <nav class="app-sidebar__nav">
+      {% block nav_items %}{% endblock %}
+    </nav>
+    <div class="app-sidebar__footer">
+      <a class="app-nav-link app-nav-link--muted" href="#"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="app-topbar">
+      <h1 class="app-topbar__title">{% block page_title %}{% endblock %}</h1>
+      <div class="app-topbar__user">
+        <span class="app-role-badge">{% block role_label %}{% endblock %}</span>
+        <span class="app-topbar__name">{{ request.user.get_full_name|default:request.user.username }}</span>
+      </div>
+    </header>
+    <main class="app-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+</div>
+{% endblock %}

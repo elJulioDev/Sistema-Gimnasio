@@ -1,0 +1,27 @@
+{% extends 'layout/base_admin.html' %}
+
+{% block title %}Dashboard — Administración{% endblock %}
+{% block page_title %}Ganancias del mes{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="app-card">
+      <p class="text-muted small mb-1">Ingresos del mes</p>
+      <h2>$4.280.000</h2>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="app-card">
+      <p class="text-muted small mb-1">Socios activos</p>
+      <h2>1.204</h2>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="app-card">
+      <p class="text-muted small mb-1">Check-ins hoy</p>
+      <h2>128</h2>
+    </div>
+  </div>
+</div>
+{% endblock %}

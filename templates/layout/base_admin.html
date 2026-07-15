@@ -1,0 +1,12 @@
+{% extends 'layout/app_base.html' %}
+
+{% block body_class %}role-admin{% endblock %}
+{% block role_label %}Administración{% endblock %}
+
+{% block nav_items %}
+<a class="app-nav-link{% if request.resolver_match.url_name == 'admin_home' %} is-active{% endif %}" href="#"><i class="bi bi-speedometer2"></i> Dashboard</a>
+<a class="app-nav-link" href="#"><i class="bi bi-people"></i> Usuarios</a>
+<a class="app-nav-link" href="#"><i class="bi bi-card-list"></i> Planes</a>
+<a class="app-nav-link" href="#"><i class="bi bi-cash-coin"></i> Pagos</a>
+<a class="app-nav-link" href="#"><i class="bi bi-qr-code-scan"></i> Check-ins</a>
+{% endblock %}
