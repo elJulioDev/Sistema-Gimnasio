@@ -16,4 +16,4 @@ class CustomUser(AbstractUser):
     estudios = models.CharField(max_length=100, blank=True)
     telefono = models.CharField(max_length=20)
     qr_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    qr_image = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    qr_base64 = models.TextField(blank=True)
