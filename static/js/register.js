@@ -1,5 +1,52 @@
 let currentStep = 1;
 
+const birthDateInput = document.getElementById('birthDate');
+const ageDisplay = document.getElementById('ageDisplay');
+
+const MIN_AGE = 15;
+const MAX_AGE = 100;
+
+const today = new Date();
+const formattedToday = today.toISOString().split('T')[0];
+if (birthDateInput) {
+    birthDateInput.max = formattedToday;
+}
+
+if (birthDateInput && ageDisplay) {
+    birthDateInput.addEventListener('change', function() {
+        if (!this.value) {
+            ageDisplay.innerHTML = '';
+            // Restablece la validación si el campo está vacío (el atributo 'required' hará su trabajo)
+            this.setCustomValidity(''); 
+            return;
+        }
+
+        const dob = new Date(this.value);
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        
+        // Ajuste si el cumpleaños de este año aún no ha pasado
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+
+        // Validaciones
+        if (age < MIN_AGE) {
+            ageDisplay.innerHTML = `<i class="bi bi-x-circle"></i> Lo sentimos, debes tener al menos ${MIN_AGE} años. (Tienes ${age})`;
+            ageDisplay.className = 'd-block mt-1 text-danger';
+            this.setCustomValidity(`Debes ser mayor de ${MIN_AGE} años.`); // Esto bloquea el formulario
+        } else if (age > MAX_AGE || age < 0) {
+            ageDisplay.innerHTML = `<i class="bi bi-exclamation-triangle"></i> Por favor ingresa una fecha válida.`;
+            ageDisplay.className = 'd-block mt-1 text-danger';
+            this.setCustomValidity('Fecha inválida.');
+        } else {
+            ageDisplay.innerHTML = `<i class="bi bi-check2-circle"></i> Tienes ${age} años.`;
+            ageDisplay.className = 'd-block mt-1 text-accent-volt'; 
+            this.setCustomValidity('');
+        }
+    });
+}
+
 function fechaLocalISO(date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -172,3 +219,202 @@ if (fileZone) {
     handleCertificadoChange(document.getElementById('certificadoInput'));
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const steps = document.querySelectorAll('.step-content');
+    const indicators = document.querySelectorAll('.register-progress .step');
+    const progressTrack = document.querySelector('.progress-track');
+    const nextBtns = document.querySelectorAll('.btn-next');
+    const prevBtns = document.querySelectorAll('.btn-prev');
+    const finishBtn = document.querySelector('.btn-finish');
+
+    let currentStep = 0;
+
+    function updateProgress() {
+        // Actualiza la línea de progreso
+        const percentage = (currentStep / (steps.length - 1)) * 100;
+        progressTrack.style.width = `${percentage}%`;
+
+        // Actualiza los círculos y contenidos
+        steps.forEach((step, i) => {
+            step.classList.toggle('d-none', i !== currentStep);
+            step.classList.toggle('active', i === currentStep);
+        });
+
+        indicators.forEach((ind, i) => {
+            ind.classList.toggle('active', i <= currentStep);
+            // Si el paso ya pasó, cambiar estilo
+            if(i < currentStep) {
+                ind.classList.add('completed');
+            } else {
+                ind.classList.remove('completed');
+            }
+        });
+    }
+
+    nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const currentFormStep = steps[currentStep];
+            const inputs = currentFormStep.querySelectorAll('input[required]');
+            let valid = true;
+
+            inputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    valid = false;
+                }
+            });
+
+            if (valid && currentStep < steps.length - 1) {
+                currentStep++;
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    });
+
+    prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    });
+
+    if(finishBtn) {
+        finishBtn.addEventListener('click', () => {
+            // Validación final y simulación de procesamiento
+            const currentFormStep = steps[currentStep];
+            const btnOriginalText = finishBtn.innerHTML;
+            finishBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
+            finishBtn.disabled = true;
+
+            setTimeout(() => {
+                currentStep++;
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1200);
+        });
+    }
+    
+    // Datos de planes para sincronizar resumen en el paso de pago
+    const planData = {
+        estudiante: { name: 'Plan Estudiante', price: '$18.990/mes' },
+        general: { name: 'Plan General', price: '$24.990/mes' },
+        municipal: { name: 'Plan Municipal', price: '$16.990/mes' }
+    };
+
+    function syncOrderSummary() {
+        const checked = document.querySelector('input[name="plan"]:checked');
+        if (!checked) return;
+        const data = planData[checked.value];
+        const nameEl = document.getElementById('summaryPlanName');
+        const priceEl = document.getElementById('summaryPlanPrice');
+        if (nameEl) nameEl.textContent = data.name;
+        if (priceEl) priceEl.textContent = data.price;
+    }
+
+    // Selección de plan: todo el card es clickable, no requiere botón aparte
+    const planCards = document.querySelectorAll('.plan-detail-card');
+
+    function selectPlanCard(card) {
+        const radio = card.closest('.plan-option').querySelector('input[type="radio"]');
+        radio.checked = true;
+        planCards.forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        syncOrderSummary();
+    }
+
+    planCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.plan-detail-card__toggle')) return;
+            selectPlanCard(card);
+            card.classList.remove('is-open');
+        });
+    });
+
+    document.querySelectorAll('.plan-detail-card__toggle').forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const card = toggle.closest('.plan-detail-card');
+            const wasOpen = card.classList.contains('is-open');
+            planCards.forEach(c => c.classList.remove('is-open'));
+            if (!wasOpen) card.classList.add('is-open');
+        });
+    });
+
+    // Carrusel de planes: transform-based, con flechas, dots y arrastre (mouse/touch)
+    const track = document.getElementById('planTrack');
+    const slides = document.querySelectorAll('.plan-carousel__slide');
+    const dots = document.querySelectorAll('.plan-carousel__dot');
+    const prevBtn = document.querySelector('.plan-carousel__nav--prev');
+    const nextBtn = document.querySelector('.plan-carousel__nav--next');
+    let activeSlide = 1;
+    let dragStartX = 0;
+    let dragDeltaX = 0;
+    let isDragging = false;
+
+    function goToSlide(index) {
+        activeSlide = Math.max(0, Math.min(slides.length - 1, index));
+        track.style.transform = `translateX(-${activeSlide * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === activeSlide));
+    }
+
+    if (track && prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', () => goToSlide(activeSlide - 1));
+        nextBtn.addEventListener('click', () => goToSlide(activeSlide + 1));
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.dot, 10)));
+        });
+
+        function dragStart(clientX) {
+            if (!window.matchMedia('(min-width: 768px)').matches) return;
+            isDragging = true;
+            dragStartX = clientX;
+            dragDeltaX = 0;
+            track.classList.add('is-dragging');
+        }
+        function dragMove(clientX) {
+            if (!isDragging) return;
+            dragDeltaX = clientX - dragStartX;
+            const percent = (dragDeltaX / track.offsetWidth) * 100;
+            track.style.transform = `translateX(calc(-${activeSlide * 100}% + ${percent}%))`;
+        }
+        function dragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            track.classList.remove('is-dragging');
+            const threshold = track.offsetWidth * 0.15;
+            if (dragDeltaX > threshold) {
+                goToSlide(activeSlide - 1);
+            } else if (dragDeltaX < -threshold) {
+                goToSlide(activeSlide + 1);
+            } else {
+                goToSlide(activeSlide);
+            }
+        }
+
+        track.addEventListener('mousedown', (e) => { e.preventDefault(); dragStart(e.clientX); });
+        window.addEventListener('mousemove', (e) => dragMove(e.clientX));
+        window.addEventListener('mouseup', dragEnd);
+
+        track.addEventListener('touchstart', (e) => dragStart(e.touches[0].clientX), { passive: true });
+        track.addEventListener('touchmove', (e) => dragMove(e.touches[0].clientX), { passive: true });
+        track.addEventListener('touchend', dragEnd);
+
+        goToSlide(activeSlide);
+    }
+
+    // Estilización métodos de pago
+    const bankCards = document.querySelectorAll('.bank-card');
+    bankCards.forEach(card => {
+        card.addEventListener('click', () => {
+            bankCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+        });
+    });
+
+    syncOrderSummary();
+});

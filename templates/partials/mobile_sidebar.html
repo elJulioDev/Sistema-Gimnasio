@@ -1,0 +1,25 @@
+<div class="mobile-sidebar" id="mobileSidebar" aria-hidden="true">
+  <div class="mobile-sidebar__header">
+    <span><span class="brand-mark">GYM</span><span class="brand-mark--accent">SYS</span></span>
+    <button class="mobile-sidebar__close" id="mobileSidebarClose" aria-label="Cerrar menú">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <nav class="mobile-sidebar__nav">
+    <a class="mobile-sidebar__link" href="{% url 'landing' %}#inicio">Inicio</a>
+    <a class="mobile-sidebar__link" href="{% url 'landing' %}#nosotros">Nosotros</a>
+    <a class="mobile-sidebar__link" href="{% url 'landing' %}#instalaciones">Instalaciones</a>
+    <a class="mobile-sidebar__link" href="{% url 'landing' %}#planes">Planes</a>
+    <a class="mobile-sidebar__link" href="{% url 'landing' %}#ubicacion">Ubicación</a>
+  </nav>
+  <div class="mobile-sidebar__account">
+    <span class="mobile-sidebar__account-title">Mi cuenta</span>
+    <a href="#" class="mobile-sidebar__account-action mobile-sidebar__account-action--primary">
+      <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+    </a>
+    <a href="{% url 'register' %}" class="mobile-sidebar__account-action">
+      <i class="bi bi-person-plus"></i> Crear cuenta
+    </a>
+  </div>
+</div>
+<div class="mobile-sidebar__backdrop" id="mobileSidebarBackdrop"></div>
