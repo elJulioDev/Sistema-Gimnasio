@@ -1,3 +1,11 @@
+function formatCurrencyCLP(value) {
+    let strValue = String(value).trim();
+    strValue = strValue.replace(/[.,]\d{1,2}$/, '');
+    const cleanValue = strValue.replace(/[.,]/g, '');
+    const finalNumber = parseInt(cleanValue, 10);
+    return isNaN(finalNumber) ? '0' : finalNumber.toLocaleString('es-CL');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const header = document.getElementById('siteHeader');
   const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
@@ -23,4 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
       link.addEventListener('click', () => collapseInstance.hide());
     });
   }
+
+  document.querySelectorAll('.raw-price').forEach(el => {
+      el.textContent = formatCurrencyCLP(el.textContent);
+  });
 });

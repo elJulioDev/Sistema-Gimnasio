@@ -171,49 +171,32 @@
     <p class="eyebrow reveal">Membresías</p>
     <h2 class="section-title reveal">Un plan para cada etapa</h2>
     <span class="plan-hint">← desliza para ver los 3 planes →</span>
+    
     <div class="row g-4 mt-2 align-items-stretch">
+      {% for plan in planes|slice:":3" %}
       <div class="col-lg-4 reveal">
-        <div class="plan-card">
-          <h3>Estudiante</h3>
-          <p class="plan-card__desc">Acceso completo con descuento verificando matrícula.</p>
-          <div class="plan-card__price"><span>$</span>18.990<span class="plan-card__period">/mes</span></div>
+        <div class="plan-card {% if forloop.counter == 2 %}plan-card--featured{% endif %}">
+          {% if forloop.counter == 2 %}<span class="plan-card__badge">Más elegido</span>{% endif %}
+          
+          <h3>{{ plan.nombre }}</h3>
+          <p class="plan-card__desc">{{ plan.descripcion_breve }}</p>
+          
+          <div class="plan-card__price">
+            <span>$</span><span class="raw-price">{{ plan.precio_mensual }}</span><span class="plan-card__period">/mes</span>
+          </div>
+          
           <ul class="plan-card__list">
-            <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
-            <li><i class="bi bi-check2"></i> Zona de pesas y cardio</li>
-            <li><i class="bi bi-check2"></i> Seguimiento de rutina</li>
+            {% for detalle in plan.detalles.all %}
+            <li><i class="bi bi-check2"></i> {{ detalle.descripcion }}</li>
+            {% endfor %}
           </ul>
-          <a href="#" class="btn btn-outline-light w-100">Elegir plan</a>
+          
+          <a href="{% url 'register' %}?plan={{ plan.id }}" class="btn {% if forloop.counter == 2 %}btn-volt{% else %}btn-outline-light{% endif %} w-100">Elegir plan</a>
         </div>
       </div>
-      <div class="col-lg-4 reveal">
-        <div class="plan-card plan-card--featured">
-          <span class="plan-card__badge">Más elegido</span>
-          <h3>General</h3>
-          <p class="plan-card__desc">El plan completo para entrenar sin restricciones.</p>
-          <div class="plan-card__price"><span>$</span>24.990<span class="plan-card__period">/mes</span></div>
-          <ul class="plan-card__list">
-            <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
-            <li><i class="bi bi-check2"></i> Todas las zonas</li>
-            <li><i class="bi bi-check2"></i> Rachas y estadísticas</li>
-            <li><i class="bi bi-check2"></i> Renovación automática</li>
-          </ul>
-          <a href="#" class="btn btn-volt w-100">Elegir plan</a>
-        </div>
-      </div>
-      <div class="col-lg-4 reveal">
-        <div class="plan-card">
-          <h3>Trabajador municipal</h3>
-          <p class="plan-card__desc">Convenio para funcionarios municipales acreditados.</p>
-          <div class="plan-card__price"><span>$</span>16.990<span class="plan-card__period">/mes</span></div>
-          <ul class="plan-card__list">
-            <li><i class="bi bi-check2"></i> Acceso 24/7 vía QR</li>
-            <li><i class="bi bi-check2"></i> Zona de pesas y cardio</li>
-            <li><i class="bi bi-check2"></i> Sin costo de inscripción</li>
-          </ul>
-          <a href="#" class="btn btn-outline-light w-100">Elegir plan</a>
-        </div>
-      </div>
+      {% endfor %}
     </div>
+
     <div class="text-center plan-card__note reveal" style="padding: 1.8rem 1.5rem; border-radius: 1rem; background: rgba(33, 173, 95, 0.08);">
       <p class="h4 fw-bold mb-2">Pase diario disponible</p>
       <p class="mb-2">¿Vienes de visita? Adquiere tu pase diario en recepción y disfruta de todas las instalaciones.</p>

@@ -14,35 +14,35 @@ if (birthDateInput) {
 
 if (birthDateInput && ageDisplay) {
     birthDateInput.addEventListener('change', function() {
+        const edadHidden = document.getElementById('edadHidden');
         if (!this.value) {
             ageDisplay.innerHTML = '';
-            // Restablece la validación si el campo está vacío (el atributo 'required' hará su trabajo)
-            this.setCustomValidity(''); 
+            this.setCustomValidity('');
+            if (edadHidden) edadHidden.value = '';
             return;
         }
 
         const dob = new Date(this.value);
         let age = today.getFullYear() - dob.getFullYear();
         const m = today.getMonth() - dob.getMonth();
-        
-        // Ajuste si el cumpleaños de este año aún no ha pasado
+
         if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
             age--;
         }
 
-        // Validaciones
         if (age < MIN_AGE) {
             ageDisplay.innerHTML = `<i class="bi bi-x-circle"></i> Lo sentimos, debes tener al menos ${MIN_AGE} años. (Tienes ${age})`;
             ageDisplay.className = 'd-block mt-1 text-danger';
-            this.setCustomValidity(`Debes ser mayor de ${MIN_AGE} años.`); // Esto bloquea el formulario
+            this.setCustomValidity(`Debes ser mayor de ${MIN_AGE} años.`);
         } else if (age > MAX_AGE || age < 0) {
             ageDisplay.innerHTML = `<i class="bi bi-exclamation-triangle"></i> Por favor ingresa una fecha válida.`;
             ageDisplay.className = 'd-block mt-1 text-danger';
             this.setCustomValidity('Fecha inválida.');
         } else {
             ageDisplay.innerHTML = `<i class="bi bi-check2-circle"></i> Tienes ${age} años.`;
-            ageDisplay.className = 'd-block mt-1 text-accent-volt'; 
+            ageDisplay.className = 'd-block mt-1 text-accent-volt';
             this.setCustomValidity('');
+            if (edadHidden) edadHidden.value = age;
         }
     });
 }
@@ -85,14 +85,12 @@ function prevStep() {
 }
 
 function selectPlan(input) {
-  document.getElementById('btnStep1').disabled = false;
-  document.getElementById('summaryPlanName').textContent = input.dataset.name;
-  const price = parseInt(input.dataset.price, 10);
-  document.getElementById('summaryPlanPrice').textContent = '$' + price.toLocaleString('es-CL');
-
-  const esEstudiante = input.value === 'estudiante';
-  document.getElementById('certificadoGroup').style.display = esEstudiante ? 'flex' : 'none';
-  if (!esEstudiante) removeCertificado();
+    document.getElementById('btnStep1').disabled = false;
+    document.getElementById('summaryPlanName').textContent = input.dataset.name;
+    document.getElementById('summaryPlanPrice').textContent = '$' + formatCurrencyCLP(input.dataset.price);
+    const esEstudiante = input.value === 'estudiante';
+    document.getElementById('certificadoGroup').style.display = esEstudiante ? 'flex' : 'none';
+    if (!esEstudiante) removeCertificado();
 }
 
 function validateStep2() {
@@ -173,6 +171,14 @@ function actualizarEdad() {
   if (sinCumplir) edad--;
 
   preview.textContent = edad >= 0 ? `Tienes ${edad} años` : '';
+}
+
+function formatCurrencyCLP(value) {
+    let strValue = String(value).trim();
+    strValue = strValue.replace(/[.,]\d{1,2}$/, '');
+    const cleanValue = strValue.replace(/[.,]/g, '');
+    const finalNumber = parseInt(cleanValue, 10);
+    return isNaN(finalNumber) ? '0' : finalNumber.toLocaleString('es-CL');
 }
 
 function handleCertificadoChange(input) {
@@ -283,37 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    if(finishBtn) {
-        finishBtn.addEventListener('click', () => {
-            // Validación final y simulación de procesamiento
-            const currentFormStep = steps[currentStep];
-            const btnOriginalText = finishBtn.innerHTML;
-            finishBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
-            finishBtn.disabled = true;
-
-            setTimeout(() => {
-                currentStep++;
-                updateProgress();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 1200);
-        });
-    }
-    
-    // Datos de planes para sincronizar resumen en el paso de pago
-    const planData = {
-        estudiante: { name: 'Plan Estudiante', price: '$18.990/mes' },
-        general: { name: 'Plan General', price: '$24.990/mes' },
-        municipal: { name: 'Plan Municipal', price: '$16.990/mes' }
-    };
-
     function syncOrderSummary() {
         const checked = document.querySelector('input[name="plan"]:checked');
         if (!checked) return;
-        const data = planData[checked.value];
+        const card = checked.closest('.plan-option').querySelector('.plan-detail-card');
         const nameEl = document.getElementById('summaryPlanName');
         const priceEl = document.getElementById('summaryPlanPrice');
-        if (nameEl) nameEl.textContent = data.name;
-        if (priceEl) priceEl.textContent = data.price;
+        if (nameEl) nameEl.textContent = card.dataset.name;
+        if (priceEl) priceEl.textContent = '$' + formatCurrencyCLP(card.dataset.price) + '/mes';
     }
 
     // Selección de plan: todo el card es clickable, no requiere botón aparte
@@ -345,16 +328,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.querySelectorAll('.raw-price').forEach(el => {
+        el.textContent = formatCurrencyCLP(el.textContent);
+    });
+
     // Carrusel de planes: transform-based, con flechas, dots y arrastre (mouse/touch)
     const track = document.getElementById('planTrack');
     const slides = document.querySelectorAll('.plan-carousel__slide');
     const dots = document.querySelectorAll('.plan-carousel__dot');
     const prevBtn = document.querySelector('.plan-carousel__nav--prev');
     const nextBtn = document.querySelector('.plan-carousel__nav--next');
-    let activeSlide = 1;
     let dragStartX = 0;
     let dragDeltaX = 0;
     let isDragging = false;
+
+    let activeSlide = 1;
+    const checkedRadio = document.querySelector('input[name="plan"]:checked');
+    if (checkedRadio) {
+        const slide = checkedRadio.closest('.plan-carousel__slide');
+        if (slide) {
+            activeSlide = parseInt(slide.dataset.slide, 10);
+        }
+    }
 
     function goToSlide(index) {
         activeSlide = Math.max(0, Math.min(slides.length - 1, index));

@@ -3,11 +3,6 @@ from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
 
-class PlanCategory(models.TextChoices):
-    GENERAL = 'general', 'General'
-    ESTUDIANTE = 'estudiante', 'Estudiante'
-    MUNICIPAL = 'municipal', 'Trabajador Municipal'
-    OTRO = 'otro', 'Otro'
 
 class PlanType(models.TextChoices):
     MENSUAL = 'mensual', 'Mensual'
@@ -15,11 +10,18 @@ class PlanType(models.TextChoices):
 
 class Plan(models.Model):
     nombre = models.CharField(max_length=100)
-    categoria = models.CharField(max_length=20, choices=PlanCategory.choices, default=PlanCategory.GENERAL)
-    precio_mensual = models.DecimalField(max_digits=10, decimal_places=2)
+    descripcion_breve = models.CharField(max_length=150, default='', help_text="Breve resumen del plan para mostrar en el inicio y registro")
+    precio_mensual = models.PositiveIntegerField()
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     tipo = models.CharField(max_length=10, choices=PlanType.choices, default=PlanType.MENSUAL)
+    orden = models.PositiveIntegerField(
+        default=0, 
+        help_text="Define el orden en el que aparecerán los planes (el número menor aparece primero)."
+    )
+    
+    class Meta:
+        ordering = ['orden']
 
     def __str__(self):
         return self.nombre

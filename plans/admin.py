@@ -14,6 +14,8 @@ class PlanDetailInline(admin.TabularInline):
 
 @admin.register(Plan)
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'categoria', 'precio_mensual', 'activo')
-    list_filter = ('categoria', 'activo')
+    list_display = ('orden', 'nombre', 'descripcion_breve', 'precio_mensual', 'activo')
+    list_display_links = ('nombre',) 
+    list_editable = ('orden', 'activo') 
+    list_filter = ('tipo', 'activo')
     inlines = [PlanDetailInline]

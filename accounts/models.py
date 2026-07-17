@@ -13,6 +13,7 @@ class CustomUser(AbstractUser):
     rut = models.CharField(max_length=12, unique=True)
     apellido_materno = models.CharField(max_length=50, blank=True)
     edad = models.PositiveIntegerField(null=True, blank=True)
+    fecha_nacimiento = models.DateField(null=True, blank=True)
     estudios = models.CharField(max_length=100, blank=True)
     telefono = models.CharField(max_length=20)
     qr_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
