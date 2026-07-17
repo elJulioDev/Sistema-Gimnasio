@@ -5,6 +5,7 @@ from django.db import IntegrityError, transaction
 from datetime import date
 from .models import CustomUser
 from plans.models import Plan
+from django.contrib.auth import login, authenticate
 
 MIN_AGE = 15
 
@@ -89,3 +90,14 @@ def register(request):
         'planes': planes,
         'plan_seleccionado_id': plan_seleccionado_id,
     })
+
+def login_view(request):
+    if request.method == 'POST':
+        rut = request.POST.get('rut', '').strip()
+        password = request.POST.get('password')
+        user = authenticate(request, username=rut, password=password)
+        if user:
+            login(request, user)
+            return redirect('landing')
+        return render(request, 'login.html', {'error': 'RUT o contraseña incorrectos.'})
+    return render(request, 'login.html')

@@ -10,4 +10,5 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')), 
 
     path('registrarse/', accounts_views.register, name='register'),
+    path('iniciar-sesion/', accounts_views.login_view, name='login'),
 ]

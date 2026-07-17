@@ -1,0 +1,79 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block title %}Iniciar Sesión - Sistema Gimnasio{% endblock %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %} 
+
+{% block body_class %}login-page{% endblock %} 
+
+{% block content %}
+<div class="site-header site-header--static">
+  {% include 'partials/navbar.html' %}
+</div>
+
+{% include 'partials/mobile_sidebar.html' %}
+
+<div class="register-bg"></div>
+
+<main class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-xl-5">
+            <div class="register-card p-4">
+                
+                <h2 class="section-title text-center mb-1" style="font-size: 1.6rem;">Iniciar sesión</h2>
+                <!-- Subtítulo ajustado con la clase del Step 2 para resaltar color y fuente -->
+                <span class="form-section-label text-center mb-4 d-block" style="margin-top: 0;">Accede a tu cuenta GYMSYS</span>
+
+                {% if error %}
+                <div class="alert alert-danger" style="font-size: 0.88rem;">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">RUT</label>
+                            <input type="text" name="rut" class="form-control" required placeholder="12.345.678-9" autofocus>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" name="password" class="form-control" required placeholder="Tu contraseña">
+                        </div>
+                    </div>
+
+                    <!-- Enlace con la tipografía de textos importantes (monoespaciada) y color acento -->
+                    <div class="text-end mt-2">
+                        <a href="#" class="text-accent-volt text-decoration-none fw-bold" style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-volt w-100 fw-bold mt-4 py-2">
+                        Entrar <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </form>
+
+                <p class="text-center mt-4 mb-0" style="font-size: 0.85rem; color: var(--text-muted);">
+                     ¿No tienes cuenta? 
+                     <a href="{% url 'register' %}" class="text-accent-volt text-decoration-none fw-bold ms-1" style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Regístrate</a>
+                </p>
+            </div>
+
+            <!-- Datos de soporte unificados con la misma fuente técnica -->
+            <p class="text-center mt-3" style="font-size: 0.78rem; color: var(--text-muted);">
+                <i class="bi bi-headset text-accent-volt me-1"></i> ¿Problemas para entrar? Escríbenos a
+                <br class="d-sm-none">
+                <a href="mailto:soporte@sistemagimnasio.cl" class="text-accent-volt text-decoration-none fw-bold ms-1" style="font-family: var(--font-mono); letter-spacing: 0.02em;">soporte@sistemagimnasio.cl</a>
+            </p>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/navbar.js' %}"></script>
+{% endblock %}
