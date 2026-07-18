@@ -145,11 +145,12 @@ function closePrivacyModal() {
 function showErrorModal(title, message) {
   document.getElementById('errorModalTitle').textContent = title;
   document.getElementById('errorModalMessage').textContent = message;
-  document.getElementById('errorModal').classList.add('is-open');
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('errorModal')).show();
 }
 
 function closeErrorModal() {
-  document.getElementById('errorModal').classList.remove('is-open');
+  const modal = bootstrap.Modal.getInstance(document.getElementById('errorModal'));
+  if (modal) modal.hide();
 }
 
 document.addEventListener('keydown', (e) => {
@@ -237,6 +238,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = Array.from(steps).findIndex(s => s.classList.contains('active'));
     if (currentStep === -1) currentStep = 0;
 
+    const jumpInput = document.getElementById('jumpToStep');
+    if (jumpInput && jumpInput.value) {
+        currentStep = parseInt(jumpInput.value, 10) - 1;
+    }
+
     function updateProgress() {
         // Actualiza la línea de progreso
         const percentage = (currentStep / (steps.length - 1)) * 100;
@@ -260,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     nextBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
             const currentFormStep = steps[currentStep];
             const inputs = currentFormStep.querySelectorAll('input[required]');
             let valid = true;
@@ -272,6 +278,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            // Lógica Exclusiva al intentar salir del Paso 2 (índice 1)
+            if (valid && currentStep === 1) {
+                const form = document.getElementById('registerForm');
+                
+                // 1. Validar que las contraseñas coincidan localmente
+                const password = form.querySelector('[name="password"]').value;
+                const confirm = form.querySelector('[name="confirmar_password"]').value;
+                if (password !== confirm) {
+                    showErrorModal('Error en contraseñas', 'Revisa que ambas contraseñas sean idénticas.');
+                    return; // Detiene el avance al paso 3
+                }
+
+                // 2. Validar que aceptó el consentimiento
+                const consentData = document.getElementById('consentData');
+                if (consentData && !consentData.checked) {
+                    showErrorModal('Consentimiento requerido', 'Debes aceptar el tratamiento de tus datos para continuar.');
+                    return; // Detiene el avance al paso 3
+                }
+
+                // 3. Consulta asíncrona a Django para validar RUT y Correo
+                const rut = form.querySelector('[name="rut"]').value;
+                const email = form.querySelector('[name="email"]').value;
+                
+                try {
+                    // Cambiamos estado del botón temporalmente
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = 'Validando...';
+                    btn.disabled = true;
+
+                    const response = await fetch(`/validar-usuario/?rut=${encodeURIComponent(rut)}&email=${encodeURIComponent(email)}`);
+                    const data = await response.json();
+
+                    // Restauramos estado del botón
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+
+                    if (!data.valido) {
+                        // Aquí se lanza el modal con el error ("Ya existe una cuenta con ese RUT")
+                        showErrorModal('Datos ya registrados', data.mensaje);
+                        return; // Evita avanzar al paso 3
+                    }
+                } catch (error) {
+                    console.error('Error de validación contra el servidor:', error);
+                    btn.disabled = false;
+                }
+            }
+
+            // Si todo está correcto (valid = true y servidor devolvió data.valido = true) avanza
             if (valid && currentStep < steps.length - 1) {
                 currentStep++;
                 updateProgress();

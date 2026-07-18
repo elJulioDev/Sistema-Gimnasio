@@ -47,6 +47,7 @@
             <!-- Contenedor del Formulario -->
             <div class="register-card p-4">
                 <form id="registerForm" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+                    <input type="hidden" id="jumpToStep" value="{{ jump_to_step|default:'' }}">
                     {% csrf_token %}
                     
                     <!-- PASO 1: SELECCIÓN DE PLAN -->
@@ -301,13 +302,13 @@
     </div>
 
     <!-- Modal con el detalle completo de la ley de protección de datos -->
-     <div class="modal fade law-modal" id="lawModal" tabindex="-1" aria-labelledby="lawModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered">
-             <div class="modal-content">
-                 <div class="modal-header">
+    <div class="modal fade law-modal" id="lawModal" tabindex="-1" aria-labelledby="lawModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
                      <h5 class="modal-title" id="lawModalLabel"><i class="bi bi-shield-check text-accent-volt me-2"></i>Protección de Datos Personales</h5>
                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                 </div>
+                </div>
                 <div class="modal-body">
                      <p style="font-size: 0.88rem; line-height: 1.5;">
                          En cumplimiento con la <strong class="text-white">Ley N° 19.628 y su reforma (Ley N° 21.719)</strong>, requerimos tu autorización explícita para procesar tu información.
@@ -318,7 +319,7 @@
                          <li class="mb-2"><strong class="text-white">Uso limitado:</strong> La información recolectada se utilizará exclusivamente para tu registro, acceso y pagos.</li>
                          <li>Revisa nuestras <a href="#" class="text-accent-volt text-decoration-none">Políticas de Privacidad</a> para más detalles.</li>
                      </ul>
-                 </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-volt fw-bold" data-bs-dismiss="modal">Entendido</button>
                 </div>
@@ -326,10 +327,34 @@
         </div>
     </div>
 
+    <div class="modal fade law-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="errorModalLabel"><i class="bi bi-exclamation-triangle text-accent-coral me-2"></i><span id="errorModalTitle">Error</span></h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+         </div>
+         <div class="modal-body">
+           <p id="errorModalMessage" style="font-size: 0.9rem;"></p>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-volt fw-bold" data-bs-dismiss="modal">Entendido</button>
+         </div>
+       </div>
+      </div>
+    </div>
+
 </main>
 {% endblock %}
 
 {% block extra_js %}
+{% if messages %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  showErrorModal('Error de registro', '{% for m in messages %}{{ m|escapejs }}{% endfor %}');
+});
+</script>
+{% endif %}
 <script src="{% static 'js/navbar.js' %}"></script>
 <script src="{% static 'js/register.js' %}"></script>
 {% endblock %}

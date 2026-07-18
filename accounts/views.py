@@ -10,6 +10,8 @@ from datetime import date, timedelta
 from plans.models import Plan, Subscription, SubscriptionStatus
 from payments.models import Payment
 from payments.gateways import get_gateway, GatewayNotImplemented
+from django.http import JsonResponse
+from accounts.models import CustomUser
 
 MIN_AGE = 15
 
@@ -49,11 +51,11 @@ def register(request):
 
         if CustomUser.objects.filter(rut=rut).exists():
             messages.error(request, 'Ya existe una cuenta con ese RUT.')
-            return render(request, 'register.html', {'planes': planes})
+            return render(request, 'register.html', {'planes': planes, 'jump_to_step': 2})
 
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, 'Ya existe una cuenta con ese correo.')
-            return render(request, 'register.html', {'planes': planes})
+            return render(request, 'register.html', {'planes': planes, 'jump_to_step': 2})
         
         metodo_pago = request.POST.get('metodo_pago', 'tarjeta_debito')
 
@@ -130,3 +132,17 @@ def login_view(request):
             return redirect('landing')
         return render(request, 'login.html', {'error': 'RUT o contraseña incorrectos.'})
     return render(request, 'login.html')
+
+def validar_usuario_ajax(request):
+    rut = request.GET.get('rut', '').strip()
+    email = request.GET.get('email', '').strip().lower()
+    
+    errores = []
+    if rut and CustomUser.objects.filter(rut=rut).exists():
+        errores.append('Ya existe una cuenta con ese RUT.')
+    if email and CustomUser.objects.filter(email=email).exists():
+        errores.append('Ya existe una cuenta con ese correo electrónico.')
+        
+    if errores:
+        return JsonResponse({'valido': False, 'mensaje': ' '.join(errores)})
+    return JsonResponse({'valido': True})

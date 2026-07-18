@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('registrarse/', accounts_views.register, name='register'),
     path('iniciar-sesion/', accounts_views.login_view, name='login'),
+    path('validar-usuario/', accounts_views.validar_usuario_ajax, name='validar_usuario_ajax'),
 ]
