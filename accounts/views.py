@@ -6,6 +6,10 @@ from datetime import date
 from .models import CustomUser
 from plans.models import Plan
 from django.contrib.auth import login, authenticate
+from datetime import date, timedelta
+from plans.models import Plan, Subscription, SubscriptionStatus
+from payments.models import Payment
+from payments.gateways import get_gateway, GatewayNotImplemented
 
 MIN_AGE = 15
 
@@ -50,6 +54,8 @@ def register(request):
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, 'Ya existe una cuenta con ese correo.')
             return render(request, 'register.html', {'planes': planes})
+        
+        metodo_pago = request.POST.get('metodo_pago', 'tarjeta_debito')
 
         try:
             with transaction.atomic():
@@ -67,6 +73,28 @@ def register(request):
                     telefono=telefono,
                     role=CustomUser.Role.CLIENTE,
                 )
+
+                fecha_inicio = date.today()
+                dias = 1 if plan.tipo == 'dia' else 30
+                subscription = Subscription.objects.create(
+                    usuario=user,
+                    plan=plan,
+                    fecha_inicio=fecha_inicio,
+                    fecha_fin=fecha_inicio + timedelta(days=dias),
+                    estado=SubscriptionStatus.ACTIVA,
+                )
+
+                payment = Payment.objects.create(
+                    subscription=subscription,
+                    monto=plan.precio_mensual,
+                    metodo_pago=metodo_pago,
+                )
+                try:
+                    get_gateway(metodo_pago).procesar(payment)
+                except GatewayNotImplemented:
+                    # pasarela placeholder: aprobación automática mientras no exista integración real
+                    payment.estado = 'aprobado'
+                    payment.save()
         except IntegrityError:
             messages.error(request, 'No se pudo crear la cuenta. Verifica tus datos.')
             return render(request, 'register.html', {'planes': planes})
@@ -78,6 +106,7 @@ def register(request):
             'registro_exitoso': True,
             'usuario': user,
             'plan_elegido': plan,
+            'suscripcion': subscription,
         })
 
     plan_id_get = request.GET.get('plan')

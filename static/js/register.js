@@ -234,7 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtns = document.querySelectorAll('.btn-prev');
     const finishBtn = document.querySelector('.btn-finish');
 
-    let currentStep = 0;
+    let currentStep = Array.from(steps).findIndex(s => s.classList.contains('active'));
+    if (currentStep === -1) currentStep = 0;
 
     function updateProgress() {
         // Actualiza la línea de progreso
@@ -298,6 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nameEl) nameEl.textContent = card.dataset.name;
         if (priceEl) priceEl.textContent = '$' + formatCurrencyCLP(card.dataset.price) + '/mes';
     }
+
+    updateProgress();
 
     // Selección de plan: todo el card es clickable, no requiere botón aparte
     const planCards = document.querySelectorAll('.plan-detail-card');
@@ -408,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('click', () => {
             bankCards.forEach(c => c.classList.remove('active'));
             card.classList.add('active');
+            document.getElementById('metodoPagoInput').value = card.dataset.method;
         });
     });
 

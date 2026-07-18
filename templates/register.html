@@ -208,14 +208,14 @@
 
                         <div class="payment-methods mb-3">
                             <label class="form-label mb-2">Método de Pago Online</label>
-                            
+                            <input type="hidden" name="metodo_pago" id="metodoPagoInput" value="tarjeta_debito">
                             <!-- Agregamos align-items-stretch para que todas las columnas midan lo mismo -->
                             <div class="row g-3 align-items-stretch">
                                 
                                 <!-- Opción 1: Webpay -->
                                 <div class="col-12 col-md-4">
                                     <!-- h-100 y flexbox centran el contenido verticalmente y mantienen el tamaño unificado -->
-                                    <div class="bank-card active p-3 text-center rounded border h-100 d-flex flex-column justify-content-center align-items-center" data-method="webpay">
+                                    <div class="bank-card active p-3 text-center rounded border h-100 d-flex flex-column justify-content-center align-items-center" data-method="tarjeta_debito">
                                         <!-- Eliminamos text-muted/text-accent-volt para que el CSS haga la magia -->
                                         <i class="bi bi-credit-card d-block mb-2" style="font-size: 1.8rem;"></i>
                                         <span class="fw-bold d-block" style="font-size: 0.85rem;">Webpay Plus</span>
@@ -234,7 +234,7 @@
                                 
                                 <!-- Opción 3: Transferencia (Banco) -->
                                 <div class="col-12 col-md-4">
-                                    <div class="bank-card p-3 text-center rounded border h-100 d-flex flex-column justify-content-center align-items-center" data-method="transferencia">
+                                    <div class="bank-card p-3 text-center rounded border h-100 d-flex flex-column justify-content-center align-items-center" data-method="cuenta_rut">
                                         <i class="bi bi-bank2 d-block mb-2" style="font-size: 1.8rem;"></i>
                                         <span class="fw-bold d-block" style="font-size: 0.85rem;">Transferencia</span>
                                         <small style="font-size: 0.72rem;">Banca en línea</small>
@@ -284,8 +284,9 @@
                             <div class="result-card__plan-name mb-1">{{ plan_elegido.nombre }}</div>
                             <div class="result-card__status mb-2"><i class="bi bi-shield-check"></i> Cuenta creada</div>
                             <div class="result-card__dates">
-                                RUT: <strong>{{ usuario.rut }}</strong><br>
-                                Correo: <strong>{{ usuario.email }}</strong>
+                              RUT: <strong>{{ usuario.rut }}</strong><br>
+                              Correo: <strong>{{ usuario.email }}</strong><br>
+                              Vigencia: <strong>{{ suscripcion.fecha_inicio|date:"d/m/Y" }} – {{ suscripcion.fecha_fin|date:"d/m/Y" }}</strong>
                             </div>
                         </div>
 
