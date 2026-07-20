@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login
 from django.db import IntegrityError, transaction
-from datetime import date
 from .models import CustomUser
 from plans.models import Plan
 from django.contrib.auth import login, authenticate
@@ -12,6 +11,7 @@ from payments.models import Payment
 from payments.gateways import get_gateway, GatewayNotImplemented
 from django.http import JsonResponse
 from accounts.models import CustomUser
+from django.utils import timezone
 
 MIN_AGE = 15
 
@@ -76,7 +76,7 @@ def register(request):
                     role=CustomUser.Role.CLIENTE,
                 )
 
-                fecha_inicio = date.today()
+                fecha_inicio = timezone.localdate()
                 dias = 1 if plan.tipo == 'dia' else 30
                 subscription = Subscription.objects.create(
                     usuario=user,
