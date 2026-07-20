@@ -21,7 +21,9 @@
       {% block nav_items %}{% endblock %}
     </nav>
     <div class="app-sidebar__footer">
+      {% block sidebar_footer %}
       <a class="app-nav-link app-nav-link--muted" href="#"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+      {% endblock %}
     </div>
   </aside>
 
@@ -36,6 +38,13 @@
     <main class="app-content">
       {% block content %}{% endblock %}
     </main>
+    {% block app_footer %}
+    <footer class="app-footer">
+      <span>© {% now "Y" %} GYMSYS</span>
+      <span class="app-footer__sep">·</span>
+      <a href="#">Soporte</a>
+    </footer>
+    {% endblock %}
   </div>
 
 </div>

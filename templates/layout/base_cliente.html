@@ -1,12 +1,62 @@
 {% extends 'layout/app_base.html' %}
+{% load static %}
 
 {% block body_class %}role-cliente{% endblock %}
 {% block role_label %}Cliente{% endblock %}
 
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/client.css' %}">
+{% endblock %}
+
 {% block nav_items %}
-<a class="app-nav-link" href="#"><i class="bi bi-speedometer2"></i> Mi dashboard</a>
-<a class="app-nav-link" href="#"><i class="bi bi-qr-code"></i> Mi QR</a>
-<a class="app-nav-link" href="#"><i class="bi bi-calendar3"></i> Mi rutina</a>
-<a class="app-nav-link" href="#"><i class="bi bi-heart-pulse"></i> Cardio</a>
-<a class="app-nav-link" href="#"><i class="bi bi-card-list"></i> Mi plan</a>
+<div class="app-nav-group">
+  <span class="app-nav-group__label">General</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_home' %} is-active{% endif %}" href="{% url 'cliente_home' %}">
+    <i class="bi bi-speedometer2"></i> Inicio
+  </a>
+</div>
+
+<div class="app-nav-group">
+  <span class="app-nav-group__label">Membresía</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_plan' %} is-active{% endif %}" href="#">
+    <i class="bi bi-card-list"></i> Mi plan y QR
+  </a>
+</div>
+
+<div class="app-nav-group">
+  <span class="app-nav-group__label">Entrenamiento</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_progreso' %} is-active{% endif %}" href="#">
+    <i class="bi bi-graph-up-arrow"></i> Mi progreso
+  </a>
+</div>
+
+<div class="app-nav-group">
+  <span class="app-nav-group__label">Cuenta</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_perfil' %} is-active{% endif %}" href="#">
+    <i class="bi bi-person-gear"></i> Mi perfil
+  </a>
+</div>
+{% endblock %}
+
+{% block sidebar_footer %}
+<div class="sidebar-user">
+  <span class="sidebar-user__avatar">{{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}</span>
+  <span class="sidebar-user__info">
+    <span class="sidebar-user__name">{{ request.user.get_full_name|default:request.user.username }}</span>
+    <span class="sidebar-user__role">Socio</span>
+  </span>
+</div>
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="sidebar-logout">
+    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+  </button>
+</form>
+<div class="sidebar-copyright">© {% now "Y" %} GYMSYS</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/client_dashboard.js' %}"></script>
 {% endblock %}

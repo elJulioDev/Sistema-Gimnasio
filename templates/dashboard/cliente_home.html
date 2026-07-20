@@ -1,0 +1,164 @@
+{% extends 'layout/base_cliente.html' %}
+
+{% block title %}Mi Dashboard — GYMSYS{% endblock %}
+{% block page_title %}Hola, {{ request.user.first_name|default:"Socio" }}{% endblock %}
+
+{% block content %}
+
+<div class="client-hero reveal">
+  <div class="client-hero__bg"></div>
+  <div class="client-hero__overlay"></div>
+  <div class="client-hero__glow"></div>
+  <div class="client-hero__content">
+    <span class="eyebrow">Racha actual</span>
+    <h2 class="client-hero__streak"><i class="bi bi-fire" aria-hidden="true"></i> 7 días</h2>
+    <p class="client-hero__lead">Llevas una semana completa sin fallar. Tu mejor racha es de 42 días.</p>
+    <div class="client-hero__badges">
+      <span class="client-badge"><span class="pulse-dot" aria-hidden="true"></span> Plan activo</span>
+      <span class="client-badge"><i class="bi bi-calendar-check" aria-hidden="true"></i> Vence 14/08/2026</span>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Resumen</span>
+      <h3 class="dashboard-section-title">Tu actividad esta semana</h3>
+    </span>
+  </div>
+  <div class="row g-3">
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--info">
+        <span class="stat-card__icon"><i class="bi bi-qr-code-scan" aria-hidden="true"></i></span>
+        <span class="stat-num">18</span>
+        <span class="stat-label">Check-ins este mes</span>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--coral">
+        <span class="stat-card__icon"><i class="bi bi-fire" aria-hidden="true"></i></span>
+        <span class="stat-num">7 días</span>
+        <span class="stat-label">Racha actual</span>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--amber">
+        <span class="stat-card__icon"><i class="bi bi-trophy" aria-hidden="true"></i></span>
+        <span class="stat-num">42 días</span>
+        <span class="stat-label">Mejor racha</span>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--violet">
+        <span class="stat-card__icon"><i class="bi bi-lightning-charge" aria-hidden="true"></i></span>
+        <span class="stat-num">3.240</span>
+        <span class="stat-label">Calorías (semana)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Actividad</span>
+      <h3 class="dashboard-section-title">Asistencia y racha</h3>
+    </span>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="app-card h-100">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h4 class="app-card__title mb-0">Asistencia reciente</h4>
+          <span class="app-card__badge">7 días</span>
+        </div>
+        <ul class="checkin-list list-unstyled mb-0">
+          <li class="checkin-row">
+            <span class="checkin-row__meta"><span class="checkin-row__date">Vie 17 jul</span><span class="checkin-row__time">07:12</span></span>
+            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
+          </li>
+          <li class="checkin-row">
+            <span class="checkin-row__meta"><span class="checkin-row__date">Jue 16 jul</span><span class="checkin-row__time">18:45</span></span>
+            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
+          </li>
+          <li class="checkin-row">
+            <span class="checkin-row__meta"><span class="checkin-row__date">Mié 15 jul</span><span class="checkin-row__time">07:05</span></span>
+            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
+          </li>
+          <li class="checkin-row">
+            <span class="checkin-row__meta"><span class="checkin-row__date">Mar 14 jul</span></span>
+            <span class="status-pill status-pill--muted"><i class="bi bi-dash-circle" aria-hidden="true"></i> Sin asistencia</span>
+          </li>
+          <li class="checkin-row">
+            <span class="checkin-row__meta"><span class="checkin-row__date">Lun 13 jul</span><span class="checkin-row__time">19:20</span></span>
+            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="app-card h-100">
+        <h4 class="app-card__title mb-2">Rachas semanales</h4>
+        <div class="week-tracker">
+          <div class="week-tracker__day is-done"><span>L</span><i class="bi bi-check-lg" aria-hidden="true"></i></div>
+          <div class="week-tracker__day is-done"><span>M</span><i class="bi bi-check-lg" aria-hidden="true"></i></div>
+          <div class="week-tracker__day is-done"><span>M</span><i class="bi bi-check-lg" aria-hidden="true"></i></div>
+          <div class="week-tracker__day"><span>J</span></div>
+          <div class="week-tracker__day is-today"><span>V</span></div>
+          <div class="week-tracker__day"><span>S</span></div>
+          <div class="week-tracker__day"><span>D</span></div>
+        </div>
+        <hr class="app-divider">
+        <div class="motivation-msg">
+          <i class="bi bi-stars" aria-hidden="true"></i>
+          <p class="mb-0">Vas por buen camino. 2 días más y superas tu racha del mes pasado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Entrenamiento</span>
+      <h3 class="dashboard-section-title">Progreso y membresía</h3>
+    </span>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="app-card h-100">
+        <h4 class="app-card__title mb-2">Progreso por máquina</h4>
+        <div class="progress-row">
+          <div class="progress-row__label"><span>Press banca</span><span class="text-muted">12/15 series</span></div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width: 80%;"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-row__label"><span>Sentadilla</span><span class="text-muted">10/12 series</span></div>
+          <div class="progress-bar-track"><div class="progress-bar-fill progress-bar-fill--info" style="width: 83%;"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-row__label"><span>Remo polea</span><span class="text-muted">8/10 series</span></div>
+          <div class="progress-bar-track"><div class="progress-bar-fill progress-bar-fill--violet" style="width: 80%;"></div></div>
+        </div>
+        <a href="#" class="btn btn-outline-light w-100 mt-1">Ver todo mi progreso</a>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="app-card h-100">
+        <h4 class="app-card__title mb-2">Mi plan</h4>
+        <div class="mini-plan-card">
+          <div>
+            <span class="mini-plan-card__name">Plan General</span>
+            <span class="mini-plan-card__dates">Vigente hasta 14/08/2026</span>
+          </div>
+          <span class="mini-plan-card__price">$24.990<small>/mes</small></span>
+        </div>
+        <a href="#" class="btn btn-volt w-100 mt-3">Ver mi QR de acceso</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
