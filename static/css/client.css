@@ -478,3 +478,7 @@
 .checkin-row__meta { display: flex; align-items: baseline; gap: 0.5rem; color: var(--text-primary); }
 .checkin-row__date { font-weight: 600; }
 .checkin-row__time { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.76rem; }
+
+.week-tracker__day.is-rest { opacity: 0.55; border-style: dashed; }
+.client-badge--danger { color: var(--coral); }
+.client-badge--danger i { color: var(--coral); }

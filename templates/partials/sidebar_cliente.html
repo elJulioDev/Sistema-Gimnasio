@@ -1,0 +1,27 @@
+<div class="app-nav-group">
+  <span class="app-nav-group__label">General</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_home' %} is-active{% endif %}" href="{% url 'cliente_home' %}">
+    <i class="bi bi-speedometer2"></i> Inicio
+  </a>
+</div>
+
+<div class="app-nav-group">
+  <span class="app-nav-group__label">Membresía</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_plan' %} is-active{% endif %}" href="{% url 'cliente_plan' %}">
+    <i class="bi bi-card-list"></i> Mi plan y QR
+  </a>
+</div>
+
+<div class="app-nav-group">
+  <span class="app-nav-group__label">Entrenamiento</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_progreso' %} is-active{% endif %}" href="{% url 'cliente_progreso' %}">
+    <i class="bi bi-graph-up-arrow"></i> Mi progreso
+  </a>
+</div>
+
+<div class="app-nav-group">
+  <span class="app-nav-group__label">Cuenta</span>
+  <a class="app-nav-link{% if request.resolver_match.url_name == 'cliente_perfil' %} is-active{% endif %}" href="{% url 'cliente_perfil' %}">
+    <i class="bi bi-person-gear"></i> Mi perfil
+  </a>
+</div>

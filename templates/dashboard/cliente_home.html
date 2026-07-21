@@ -11,11 +11,23 @@
   <div class="client-hero__glow"></div>
   <div class="client-hero__content">
     <span class="eyebrow">Racha actual</span>
-    <h2 class="client-hero__streak"><i class="bi bi-fire" aria-hidden="true"></i> 7 días</h2>
-    <p class="client-hero__lead">Llevas una semana completa sin fallar. Tu mejor racha es de 42 días.</p>
+    <h2 class="client-hero__streak"><i class="bi bi-fire" aria-hidden="true"></i> {{ racha_actual }} día{{ racha_actual|pluralize }}</h2>
+    <p class="client-hero__lead">
+      {% if racha_actual > 0 %}
+        Llevas {{ racha_actual }} día{{ racha_actual|pluralize }} seguido{{ racha_actual|pluralize }} asistiendo. Sigue así.
+      {% else %}
+        Aún no registras asistencia esta semana. Vamos a partir.
+      {% endif %}
+    </p>
     <div class="client-hero__badges">
+      {% if suscripcion and suscripcion.esta_vigente %}
       <span class="client-badge"><span class="pulse-dot" aria-hidden="true"></span> Plan activo</span>
-      <span class="client-badge"><i class="bi bi-calendar-check" aria-hidden="true"></i> Vence 14/08/2026</span>
+      <span class="client-badge"><i class="bi bi-calendar-check" aria-hidden="true"></i> Vence {{ suscripcion.fecha_fin|date:"d/m/Y" }}</span>
+      {% elif suscripcion %}
+      <span class="client-badge client-badge--danger"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Plan vencido</span>
+      {% else %}
+      <span class="client-badge client-badge--danger"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Sin plan activo</span>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -31,28 +43,28 @@
     <div class="col-6 col-lg-3">
       <div class="app-card stat-card stat-card--info">
         <span class="stat-card__icon"><i class="bi bi-qr-code-scan" aria-hidden="true"></i></span>
-        <span class="stat-num">18</span>
+        <span class="stat-num">{{ checkins_mes }}</span>
         <span class="stat-label">Check-ins este mes</span>
       </div>
     </div>
     <div class="col-6 col-lg-3">
       <div class="app-card stat-card stat-card--coral">
         <span class="stat-card__icon"><i class="bi bi-fire" aria-hidden="true"></i></span>
-        <span class="stat-num">7 días</span>
+        <span class="stat-num">{{ racha_actual }} día{{ racha_actual|pluralize }}</span>
         <span class="stat-label">Racha actual</span>
       </div>
     </div>
     <div class="col-6 col-lg-3">
       <div class="app-card stat-card stat-card--amber">
-        <span class="stat-card__icon"><i class="bi bi-trophy" aria-hidden="true"></i></span>
-        <span class="stat-num">42 días</span>
-        <span class="stat-label">Mejor racha</span>
+        <span class="stat-card__icon"><i class="bi bi-calendar-week" aria-hidden="true"></i></span>
+        <span class="stat-num">{{ dias_semana_count }}/6</span>
+        <span class="stat-label">Días esta semana</span>
       </div>
     </div>
     <div class="col-6 col-lg-3">
       <div class="app-card stat-card stat-card--violet">
         <span class="stat-card__icon"><i class="bi bi-lightning-charge" aria-hidden="true"></i></span>
-        <span class="stat-num">3.240</span>
+        <span class="stat-num">{{ calorias_semana }}</span>
         <span class="stat-label">Calorías (semana)</span>
       </div>
     </div>
@@ -71,29 +83,19 @@
       <div class="app-card h-100">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <h4 class="app-card__title mb-0">Asistencia reciente</h4>
-          <span class="app-card__badge">7 días</span>
+          <span class="app-card__badge">Últimos 5</span>
         </div>
         <ul class="checkin-list list-unstyled mb-0">
+          {% for c in checkins_recientes %}
           <li class="checkin-row">
-            <span class="checkin-row__meta"><span class="checkin-row__date">Vie 17 jul</span><span class="checkin-row__time">07:12</span></span>
+            <span class="checkin-row__meta"><span class="checkin-row__date">{{ c.fecha_label }}</span><span class="checkin-row__time">{{ c.hora_label }}</span></span>
             <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
           </li>
+          {% empty %}
           <li class="checkin-row">
-            <span class="checkin-row__meta"><span class="checkin-row__date">Jue 16 jul</span><span class="checkin-row__time">18:45</span></span>
-            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
+            <span class="checkin-row__meta text-muted">Sin check-ins registrados aún.</span>
           </li>
-          <li class="checkin-row">
-            <span class="checkin-row__meta"><span class="checkin-row__date">Mié 15 jul</span><span class="checkin-row__time">07:05</span></span>
-            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
-          </li>
-          <li class="checkin-row">
-            <span class="checkin-row__meta"><span class="checkin-row__date">Mar 14 jul</span></span>
-            <span class="status-pill status-pill--muted"><i class="bi bi-dash-circle" aria-hidden="true"></i> Sin asistencia</span>
-          </li>
-          <li class="checkin-row">
-            <span class="checkin-row__meta"><span class="checkin-row__date">Lun 13 jul</span><span class="checkin-row__time">19:20</span></span>
-            <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Registrado</span>
-          </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
@@ -101,18 +103,21 @@
       <div class="app-card h-100">
         <h4 class="app-card__title mb-2">Rachas semanales</h4>
         <div class="week-tracker">
-          <div class="week-tracker__day is-done"><span>L</span><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-          <div class="week-tracker__day is-done"><span>M</span><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-          <div class="week-tracker__day is-done"><span>M</span><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-          <div class="week-tracker__day"><span>J</span></div>
-          <div class="week-tracker__day is-today"><span>V</span></div>
-          <div class="week-tracker__day"><span>S</span></div>
-          <div class="week-tracker__day"><span>D</span></div>
+          {% for dia in semana %}
+          <div class="week-tracker__day{% if dia.asistio %} is-done{% endif %}{% if dia.es_hoy %} is-today{% endif %}{% if dia.es_descanso %} is-rest{% endif %}">
+            <span>{{ dia.letra }}</span>
+            {% if dia.asistio %}<i class="bi bi-check-lg" aria-hidden="true"></i>{% endif %}
+          </div>
+          {% endfor %}
         </div>
         <hr class="app-divider">
         <div class="motivation-msg">
           <i class="bi bi-stars" aria-hidden="true"></i>
-          <p class="mb-0">Vas por buen camino. 2 días más y superas tu racha del mes pasado.</p>
+          {% if racha_actual > 0 %}
+          <p class="mb-0">Vas por buen camino. No rompas la racha.</p>
+          {% else %}
+          <p class="mb-0">Hoy es un buen día para empezar tu racha.</p>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -130,32 +135,28 @@
     <div class="col-lg-6">
       <div class="app-card h-100">
         <h4 class="app-card__title mb-2">Progreso por máquina</h4>
-        <div class="progress-row">
-          <div class="progress-row__label"><span>Press banca</span><span class="text-muted">12/15 series</span></div>
-          <div class="progress-bar-track"><div class="progress-bar-fill" style="width: 80%;"></div></div>
+        <div class="text-center py-4">
+          <i class="bi bi-clipboard-data text-muted mb-2" style="font-size: 1.6rem;"></i>
+          <p class="text-muted mb-0">Aún no tienes una rutina activa registrada.</p>
         </div>
-        <div class="progress-row">
-          <div class="progress-row__label"><span>Sentadilla</span><span class="text-muted">10/12 series</span></div>
-          <div class="progress-bar-track"><div class="progress-bar-fill progress-bar-fill--info" style="width: 83%;"></div></div>
-        </div>
-        <div class="progress-row">
-          <div class="progress-row__label"><span>Remo polea</span><span class="text-muted">8/10 series</span></div>
-          <div class="progress-bar-track"><div class="progress-bar-fill progress-bar-fill--violet" style="width: 80%;"></div></div>
-        </div>
-        <a href="#" class="btn btn-outline-light w-100 mt-1">Ver todo mi progreso</a>
+        <a href="{% url 'cliente_progreso' %}" class="btn btn-outline-light w-100 mt-1">Ver mi progreso</a>
       </div>
     </div>
     <div class="col-lg-6">
       <div class="app-card h-100">
         <h4 class="app-card__title mb-2">Mi plan</h4>
+        {% if suscripcion %}
         <div class="mini-plan-card">
           <div>
-            <span class="mini-plan-card__name">Plan General</span>
-            <span class="mini-plan-card__dates">Vigente hasta 14/08/2026</span>
+            <span class="mini-plan-card__name">{{ suscripcion.plan.nombre }}</span>
+            <span class="mini-plan-card__dates">Vigente hasta {{ suscripcion.fecha_fin|date:"d/m/Y" }}</span>
           </div>
-          <span class="mini-plan-card__price">$24.990<small>/mes</small></span>
+          <span class="mini-plan-card__price">${{ suscripcion.plan.precio_mensual }}<small>/mes</small></span>
         </div>
-        <a href="#" class="btn btn-volt w-100 mt-3">Ver mi QR de acceso</a>
+        {% else %}
+        <p class="text-muted">No tienes un plan activo.</p>
+        {% endif %}
+        <a href="{% url 'cliente_plan' %}" class="btn btn-volt w-100 mt-3">Ver mi QR de acceso</a>
       </div>
     </div>
   </div>

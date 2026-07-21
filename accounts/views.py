@@ -129,6 +129,10 @@ def login_view(request):
         user = authenticate(request, username=rut, password=password)
         if user:
             login(request, user)
+            if user.role == CustomUser.Role.CLIENTE:
+                return redirect('cliente_home')
+            if user.role == CustomUser.Role.ADMIN:
+                return redirect('admin_home')
             return redirect('landing')
         return render(request, 'login.html', {'error': 'RUT o contraseña incorrectos.'})
     return render(request, 'login.html')
