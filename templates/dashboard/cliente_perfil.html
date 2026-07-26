@@ -1,0 +1,54 @@
+{% extends 'layout/base_cliente.html' %}
+
+{% block title %}Mi Perfil — GYMSYS{% endblock %}
+{% block page_title %}Mi perfil{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+{% for m in messages %}
+<div class="alert alert-{% if m.tags == 'error' %}danger{% else %}{{ m.tags }}{% endif %} reveal" style="font-size: 0.88rem;">{{ m }}</div>
+{% endfor %}
+{% endif %}
+
+<div class="dashboard-section reveal">
+  <div class="row g-3">
+    <div class="col-lg-5">
+      <div class="app-card h-100 text-center">
+        <span class="profile-avatar">{{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}</span>
+        <h4 class="app-card__title mt-3 mb-1">{{ request.user.get_full_name }}</h4>
+        <p class="text-muted mb-3">RUT {{ request.user.rut }}</p>
+        <ul class="profile-facts list-unstyled mb-0 text-start">
+          <li><span>Fecha de nacimiento</span><strong>{{ request.user.fecha_nacimiento|date:"d/m/Y"|default:"—" }}</strong></li>
+          <li><span>Edad</span><strong>{{ request.user.edad|default:"—" }} años</strong></li>
+          <li><span>Estudios</span><strong>{{ request.user.estudios|default:"—" }}</strong></li>
+          <li><span>Miembro desde</span><strong>{{ request.user.date_joined|date:"d/m/Y" }}</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="app-card h-100">
+        <h4 class="app-card__title mb-3">Datos de contacto</h4>
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Correo electrónico</label>
+              <input type="email" name="email" class="form-control" value="{{ request.user.email }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Teléfono</label>
+              <input type="tel" name="telefono" class="form-control" value="{{ request.user.telefono }}" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-volt fw-bold mt-4">
+            <i class="bi bi-check2"></i> Guardar cambios
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

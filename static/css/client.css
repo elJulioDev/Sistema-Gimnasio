@@ -482,3 +482,93 @@
 .week-tracker__day.is-rest { opacity: 0.55; border-style: dashed; }
 .client-badge--danger { color: var(--coral); }
 .client-badge--danger i { color: var(--coral); }
+
+.text-accent-volt { color: var(--volt) !important; }
+.text-accent-coral { color: var(--coral) !important; }
+
+.plan-summary__price {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--volt);
+  margin-bottom: 0.3rem;
+}
+.plan-summary__price small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+.qr-panel__box {
+  display: inline-block;
+  background: #ffffff;
+  border-radius: 0.9rem;
+  padding: 1rem;
+}
+.qr-panel__box img { display: block; }
+
+.exercise-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.exercise-row:last-child { border-bottom: none; }
+.exercise-row__name { flex: 1; font-weight: 600; }
+.exercise-row__target { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.78rem; }
+
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--volt), var(--volt-dim));
+  color: #0b0e11;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.profile-facts li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.profile-facts li:last-child { border-bottom: none; }
+.profile-facts span { color: var(--text-muted); }
+.profile-facts strong { color: var(--text-primary); }
+
+.role-cliente .form-control {
+  background: var(--bg-panel-2) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  padding: 0.7rem 1rem;
+  border-radius: 0.6rem;
+}
+.role-cliente .form-control:focus {
+  border-color: var(--volt) !important;
+  box-shadow: 0 0 0 3px rgba(200, 255, 77, 0.1) !important;
+}
+.role-cliente .form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.role-cliente .alert {
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--bg-panel-2);
+  color: var(--text-primary);
+}
+.role-cliente .alert-success { border-color: rgba(200, 255, 77, 0.35); color: var(--volt); }
+.role-cliente .alert-danger { border-color: rgba(255, 67, 104, 0.35); color: var(--coral); }

@@ -1,0 +1,112 @@
+{% extends 'layout/base_cliente.html' %}
+
+{% block title %}Mi Progreso — GYMSYS{% endblock %}
+{% block page_title %}Mi progreso{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-section reveal">
+  <div class="row g-3">
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--coral">
+        <span class="stat-card__icon"><i class="bi bi-fire"></i></span>
+        <span class="stat-num">{{ racha_actual }} día{{ racha_actual|pluralize }}</span>
+        <span class="stat-label">Racha actual</span>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--amber">
+        <span class="stat-card__icon"><i class="bi bi-lightning-charge"></i></span>
+        <span class="stat-num">{{ calorias_semana }}</span>
+        <span class="stat-label">Calorías (semana)</span>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--info">
+        <span class="stat-card__icon"><i class="bi bi-stopwatch"></i></span>
+        <span class="stat-num">{{ cardio_logs|length }}</span>
+        <span class="stat-label">Sesiones cardio</span>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="app-card stat-card stat-card--violet">
+        <span class="stat-card__icon"><i class="bi bi-list-check"></i></span>
+        <span class="stat-num">{% if progreso %}{{ progreso.dias|length }}{% else %}0{% endif %}</span>
+        <span class="stat-label">Días de rutina</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Entrenamiento</span>
+      <h3 class="dashboard-section-title">Rutina activa</h3>
+    </span>
+  </div>
+
+  {% if progreso %}
+  <div class="row g-3">
+    {% for dia in progreso.dias %}
+    <div class="col-lg-6">
+      <div class="app-card h-100">
+        <h4 class="app-card__title mb-3">{{ dia.dia }}</h4>
+        {% if dia.ejercicios %}
+        <ul class="list-unstyled mb-0">
+          {% for ej in dia.ejercicios %}
+          <li class="exercise-row">
+            <span class="exercise-row__name">{{ ej.machine }}</span>
+            <span class="exercise-row__target">{{ ej.series_objetivo }}x{{ ej.repeticiones_objetivo }}</span>
+            {% if ej.ultimo_log %}
+            <span class="status-pill status-pill--ok">{{ ej.ultimo_log.series_logradas }}x{{ ej.ultimo_log.repeticiones_logradas }}</span>
+            {% else %}
+            <span class="status-pill status-pill--muted">Sin registro</span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-muted mb-0">Sin ejercicios asignados.</p>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="app-card text-center py-5">
+    <i class="bi bi-clipboard-data text-accent-volt mb-2" style="font-size: 2rem;"></i>
+    <h3 class="app-card__title">Aún no tienes una rutina activa</h3>
+    <p class="text-muted mb-0">Pide a recepción que te asigne una rutina personalizada.</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Historial</span>
+      <h3 class="dashboard-section-title">Cardio</h3>
+    </span>
+  </div>
+  <div class="app-card">
+    {% if cardio_logs %}
+    <table class="table client-table mb-0">
+      <thead><tr><th>Fecha</th><th>Minutos</th><th>Calorías</th></tr></thead>
+      <tbody>
+        {% for log in cardio_logs %}
+        <tr>
+          <td data-label="Fecha">{{ log.fecha|date:"d/m/Y" }}</td>
+          <td data-label="Minutos">{{ log.minutos }} min</td>
+          <td data-label="Calorías">{{ log.calorias_estimadas|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted mb-0">Sin sesiones de cardio registradas.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

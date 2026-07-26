@@ -4,9 +4,107 @@
 {% block page_title %}Mi plan y QR{% endblock %}
 
 {% block content %}
-<div class="app-card text-center py-5">
-  <i class="bi bi-tools text-accent-volt mb-2" style="font-size: 2rem;"></i>
-  <h3 class="app-card__title">Sección en construcción</h3>
-  <p class="text-muted mb-0">Estamos trabajando en esta vista.</p>
+
+{% if suscripcion %}
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Membresía</span>
+      <h3 class="dashboard-section-title">{{ suscripcion.plan.nombre }}</h3>
+    </span>
+    {% if suscripcion.esta_vigente %}
+    <span class="status-pill status-pill--ok"><i class="bi bi-check-circle-fill"></i> Activo</span>
+    {% else %}
+    <span class="status-pill status-pill--danger"><i class="bi bi-exclamation-circle"></i> Vencido</span>
+    {% endif %}
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="app-card h-100">
+        <div class="plan-summary__price">${{ suscripcion.plan.precio_mensual }}<small>/mes</small></div>
+        <p class="text-muted mb-3">{{ suscripcion.plan.descripcion_breve }}</p>
+
+        <div class="progress-row">
+          <div class="progress-row__label">
+            <span>{{ suscripcion.fecha_inicio|date:"d/m/Y" }}</span>
+            <span>{{ suscripcion.fecha_fin|date:"d/m/Y" }}</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" style="width: {{ porcentaje }}%"></div>
+          </div>
+        </div>
+        <p class="text-muted small mb-0">
+          {% if dias_restantes >= 0 %}
+          Quedan {{ dias_restantes }} día{{ dias_restantes|pluralize }} de vigencia.
+          {% else %}
+          Venció hace {{ dias_restantes|cut:"-" }} día{{ dias_restantes|pluralize }}.
+          {% endif %}
+        </p>
+
+        <a href="{% url 'landing' %}#planes" class="btn btn-outline-light w-100 mt-3">
+          <i class="bi bi-arrow-repeat"></i> Cambiar o renovar plan
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="app-card h-100 text-center">
+        <h4 class="app-card__title mb-3">Tu código de acceso</h4>
+        {% if request.user.qr_base64 %}
+        <div class="qr-panel__box">
+          <img src="data:image/png;base64,{{ request.user.qr_base64 }}" alt="Código QR" width="180" height="180">
+        </div>
+        <a href="data:image/png;base64,{{ request.user.qr_base64 }}" download="qr-{{ request.user.rut }}.png" class="btn btn-volt w-100 mt-3">
+          <i class="bi bi-download"></i> Descargar QR
+        </a>
+        {% else %}
+        <p class="text-muted mb-0">No se pudo generar tu código QR.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="dashboard-section reveal">
+  <div class="dashboard-section__head">
+    <span class="dashboard-section__head-text">
+      <span class="eyebrow">Historial</span>
+      <h3 class="dashboard-section-title">Pagos</h3>
+    </span>
+  </div>
+  <div class="app-card">
+    {% if pagos %}
+    <table class="table client-table mb-0">
+      <thead><tr><th>Fecha</th><th>Método</th><th>Monto</th><th>Estado</th></tr></thead>
+      <tbody>
+        {% for pago in pagos %}
+        <tr>
+          <td data-label="Fecha">{{ pago.fecha_creacion|date:"d/m/Y" }}</td>
+          <td data-label="Método">{{ pago.get_metodo_pago_display }}</td>
+          <td data-label="Monto">${{ pago.monto }}</td>
+          <td data-label="Estado">
+            <span class="status-pill {% if pago.estado == 'aprobado' %}status-pill--ok{% elif pago.estado == 'rechazado' %}status-pill--danger{% else %}status-pill--warn{% endif %}">
+              {{ pago.get_estado_display }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted mb-0">Sin pagos registrados.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% else %}
+<div class="app-card text-center py-5 reveal">
+  <i class="bi bi-card-list text-accent-volt mb-2" style="font-size: 2rem;"></i>
+  <h3 class="app-card__title">No tienes un plan activo</h3>
+  <p class="text-muted mb-3">Elige un plan para generar tu acceso QR.</p>
+  <a href="{% url 'landing' %}#planes" class="btn btn-volt">Ver planes</a>
+</div>
+{% endif %}
+
 {% endblock %}

@@ -76,3 +76,27 @@ def calorias_semana(usuario):
         total=Sum('calorias_estimadas')
     )['total']
     return total or 0
+
+def progreso_rutina_activa(usuario):
+    rutina = usuario.rutinas.filter(activa=True).prefetch_related(
+        'dias__ejercicios__machine', 'dias__ejercicios__logs'
+    ).first()
+    if not rutina:
+        return None
+
+    dias = []
+    for dia in sorted(rutina.dias.all(), key=lambda d: d.dia_semana):
+        ejercicios = []
+        for ej in dia.ejercicios.all():
+            logs = sorted(ej.logs.all(), key=lambda l: l.fecha, reverse=True)
+            ejercicios.append({
+                'machine': ej.machine.nombre,
+                'series_objetivo': ej.series_objetivo,
+                'repeticiones_objetivo': ej.repeticiones_objetivo,
+                'ultimo_log': logs[0] if logs else None,
+            })
+        dias.append({'dia': dia.get_dia_semana_display(), 'ejercicios': ejercicios})
+    return {'rutina': rutina, 'dias': dias}
+
+def historial_cardio(usuario, limite=10):
+    return usuario.cardio_logs.order_by('-fecha')[:limite]
